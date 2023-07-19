@@ -7,14 +7,18 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/deckarep/golang-set v1.8.0
 	github.com/ethereum/go-ethereum v1.10.20
-	github.com/google/gofuzz v1.1.1-0.20200604201612-c04b05f3adfa
 	github.com/gorilla/websocket v1.4.2
 	github.com/pierrec/xxHash v0.1.5
-	github.com/rs/cors v1.8.2
+	github.com/rs/cors v1.8.0
 	github.com/stretchr/testify v1.7.2
-	github.com/vedhavyas/go-subkey/v2 v2.0.0
-	golang.org/x/crypto v0.7.0
+	// github.com/vedhavyas/go-subkey/v2 v2.0.0
+	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce
+)
+
+require (
+	github.com/google/gofuzz v1.1.1-0.20200604201612-c04b05f3adfa
+	github.com/vedhavyas/go-subkey/v2 v2.0.0
 )
 
 require (

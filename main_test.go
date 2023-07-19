@@ -44,8 +44,13 @@ func Example_simpleConnect() {
 		panic(err)
 	}
 
+<<<<<<< HEAD
 	fmt.Printf("You are connected to chain %v using %v \n", chain, nodeName)
 	// Output: You are connected to chain Avail Local Solo using Avail Node
+=======
+	fmt.Printf("You are connected to chain %v using %v v%v\n", chain, nodeName, nodeVersion)
+	// Output: You are connected to chain Avail Local Solo using Avail Node v1.6.1-ee9dcadb702
+>>>>>>> 9b69d54 (fix: appID type and bump subkey version)
 }
 
 func Example_listenToNewBlocks() {

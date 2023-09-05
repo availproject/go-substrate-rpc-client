@@ -34,6 +34,7 @@ type ExtrinsicPayloadV3 struct {
 	Era         ExtrinsicEra // extra via system::CheckEra
 	Nonce       UCompact     // extra via system::CheckNonce (Compact<Index> where Index is u32)
 	Tip         UCompact     // extra via balances::TakeFees (Compact<Balance> where Balance is u128)
+	AppID       UCompact     // Avail specific AppID
 	SpecVersion U32          // additional via system::CheckVersion
 	GenesisHash Hash         // additional via system::CheckGenesis
 	BlockHash   Hash         // additional via system::CheckEra

@@ -25,36 +25,9 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 )
 
-type Tuple struct {
-	Start  U32
-	Offset U32
-}
-type AppId UCompact
-
-type DataLookupIndexItem struct {
-	AppId AppId    `json:"appId"`
-	Start UCompact `json:"start"`
-}
 type DataLookup struct {
-	Size  UCompact              `json:"size"`
-	Index []DataLookupIndexItem `json:"index"`
-}
-
-type KateCommitment struct {
-	Rows       UCompact `json:"rows"`
-	Cols       UCompact `json:"cols"`
-	DataRoot   Hash     `json:"dataRoot"`
-	Commitment []U8     `json:"commitment"`
-}
-
-type V1HeaderExtension struct {
-	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"appLookup"`
-}
-type VTHeaderExtension struct {
-	NewField   []U8           `json:"newField"`
-	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"appLookup"`
+	Size  U32      `json:"size"`
+	Index [][2]U32 `json:"index"`
 }
 
 type HeaderExtensionEnum struct {

@@ -146,8 +146,8 @@ func (e *Extrinsic) Sign(signer signature.KeyringPair, o SignatureOptions) error
 			GenesisHash: o.GenesisHash,
 			BlockHash:   o.BlockHash,
 		},
-		TransactionVersion: o.TransactionVersion,
 		AppID:              o.AppID,
+		TransactionVersion: o.TransactionVersion,
 	}
 
 	signerPubKey, err := NewMultiAddressFromAccountID(signer.PublicKey)
@@ -358,5 +358,6 @@ type SignaturePayload struct {
 	Nonce          UCompact
 	RuntimeVersion RuntimeVersion
 	Tip            UCompact
+	AppID          UCompact
 	Version        uint8
 }

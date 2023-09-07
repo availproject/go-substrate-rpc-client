@@ -17,6 +17,7 @@
 package types_test
 
 import (
+	"fmt"
 	"testing"
 
 	. "github.com/centrifuge/go-substrate-rpc-client/v4/types"
@@ -94,6 +95,7 @@ func TestHeader_EncodedLength(t *testing.T) {
 
 func TestHeader_Encode(t *testing.T) {
 	x, err := EncodeToHex(exampleHeader)
+	fmt.Println(x)
 	if err != nil {
 		panic(err)
 	}

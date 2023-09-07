@@ -30,6 +30,22 @@ type DataLookup struct {
 	Index [][2]U32 `json:"index"`
 }
 
+type KateCommitment struct {
+	Rows       UCompact `json:"rows"`
+	Cols       UCompact `json:"cols"`
+	DataRoot   Hash     `json:"dataRoot"`
+	Commitment []U8     `json:"commitment"`
+}
+
+type V1HeaderExtension struct {
+	Commitment KateCommitment `json:"commitment"`
+	AppLookup  DataLookup     `json:"appLookup"`
+}
+type VTHeaderExtension struct {
+	NewField   []U8           `json:"newField"`
+	Commitment KateCommitment `json:"commitment"`
+	AppLookup  DataLookup     `json:"appLookup"`
+}
 type HeaderExtensionEnum struct {
 	V1    V1HeaderExtension `json:"V1"`
 	VTest VTHeaderExtension `json:"VTest"`
@@ -49,6 +65,8 @@ type Header struct {
 }
 
 type BlockNumber U32
+
+type AppId UCompact
 
 // UnmarshalJSON fills BlockNumber with the JSON encoded byte array given by bz
 func (b *BlockNumber) UnmarshalJSON(bz []byte) error {

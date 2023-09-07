@@ -43,13 +43,9 @@ func Example_simpleConnect() {
 	if err != nil {
 		panic(err)
 	}
-	nodeVersion, err := api.RPC.System.Version()
-	if err != nil {
-		panic(err)
-	}
 
-	fmt.Printf("You are connected to chain %v using %v v%v\n", chain, nodeName, nodeVersion)
-	// Output: You are connected to chain Avail Local Solo using Avail Node v1.6.1-ee9dcadb702
+	fmt.Printf("You are connected to chain %v using %v \n", chain, nodeName)
+	// Output: You are connected to chain Avail Local Solo using Avail Node
 }
 
 func Example_listenToNewBlocks() {

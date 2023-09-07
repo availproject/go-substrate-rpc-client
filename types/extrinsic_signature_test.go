@@ -48,7 +48,7 @@ func TestExtrinsicSignatureV3_EncodeDecode(t *testing.T) {
 
 	AssertRoundTripFuzz[ExtrinsicSignatureV3](t, 1000, extrinsicSignatureV3FuzzOpts...)
 	AssertDecodeNilData[ExtrinsicSignatureV3](t)
-	AssertEncodeEmptyObj[ExtrinsicSignatureV3](t, 69)
+	AssertEncodeEmptyObj[ExtrinsicSignatureV3](t, 70)
 }
 
 var (

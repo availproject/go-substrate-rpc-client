@@ -17,6 +17,7 @@
 package types
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
@@ -268,6 +269,230 @@ type EventOffencesOffence struct {
 	Kind           Bytes16
 	OpaqueTimeSlot Bytes
 	Topics         []Hash
+}
+
+type EventOrmlTokensEndowed struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensDustLost struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensTransfer struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	From       AccountID
+	To         AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensReserved struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensUnreserved struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensReserveRepatriated struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	From       AccountID
+	To         AccountID
+	Amount     U128
+	Status     BalanceStatus
+	Topics     []Hash
+}
+
+type EventOrmlTokensBalanceSet struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Free       U128
+	Reserved   U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensTotalIssuanceSet struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensWithdrawn struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensSlashed struct {
+	Phase          Phase
+	CurrencyID     CurrencyID
+	Who            AccountID
+	FreeAmount     U128
+	ReservedAmount U128
+	Topics         []Hash
+}
+
+type EventOrmlTokensDeposited struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensLockSet struct {
+	Phase      Phase
+	LockID     [8]U8
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensLockRemoved struct {
+	Phase      Phase
+	LockID     [8]U8
+	CurrencyID CurrencyID
+	Who        AccountID
+	Topics     []Hash
+}
+
+type EventOrmlTokensLocked struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlTokensUnlocked struct {
+	Phase      Phase
+	CurrencyID CurrencyID
+	Who        AccountID
+	Amount     U128
+	Topics     []Hash
+}
+
+type EventOrmlAssetRegistryRegisteredAsset struct {
+	Phase    Phase
+	AssetID  CurrencyID
+	Metadata AssetMetadata
+	Topics   []Hash
+}
+
+type EventOrmlAssetRegistryUpdatedAsset struct {
+	Phase    Phase
+	AssetID  CurrencyID
+	Metadata AssetMetadata
+	Topics   []Hash
+}
+
+type AssetMetadata struct {
+	Decimals           U32
+	Name               []U8
+	Symbol             []U8
+	ExistentialBalance U128
+	Location           Option[VersionedMultiLocation]
+	Additional         CustomMetadata
+}
+
+type CustomMetadata struct {
+	Transferability CrossChainTransferability
+	Mintable        bool
+	Permissioned    bool
+	PoolCurrency    bool
+}
+
+type CrossChainTransferability struct {
+	IsNone bool
+
+	IsXcm bool
+	AsXcm XcmMetadata
+
+	IsConnectors bool
+
+	IsAll bool
+	AsAll XcmMetadata
+}
+
+func (c *CrossChainTransferability) Decode(decoder scale.Decoder) error {
+	b, err := decoder.ReadOneByte()
+
+	if err != nil {
+		return err
+	}
+
+	switch b {
+	case 0:
+		c.IsNone = true
+
+		return nil
+	case 1:
+		c.IsXcm = true
+
+		return decoder.Decode(&c.AsXcm)
+	case 2:
+		c.IsConnectors = true
+
+		return nil
+
+	case 3:
+		c.IsAll = true
+
+		return decoder.Decode(&c.AsAll)
+	default:
+		return errors.New("unsupported cross chain transferability")
+	}
+}
+
+func (c CrossChainTransferability) Encode(encoder scale.Encoder) error {
+	switch {
+	case c.IsNone:
+		return encoder.PushByte(0)
+	case c.IsXcm:
+		if err := encoder.PushByte(1); err != nil {
+			return err
+		}
+
+		return encoder.Encode(c.AsXcm)
+	case c.IsConnectors:
+		return encoder.PushByte(2)
+	case c.IsAll:
+		if err := encoder.PushByte(3); err != nil {
+			return err
+		}
+
+		return encoder.Encode(c.AsAll)
+	default:
+		return errors.New("unsupported cross chain transferability")
+	}
+}
+
+type XcmMetadata struct {
+	FeePerSecond Option[U128]
 }
 
 // EventParasCurrentCodeUpdated is emitted when the current code has been updated for a Para.
@@ -2514,6 +2739,23 @@ type EventTreasuryDeposit struct {
 	Phase     Phase
 	Deposited U128
 	Topics    []Hash
+}
+
+// EventTreasurySpendApproved is emitted when a spend is approved.
+type EventTreasurySpendApproved struct {
+	Phase         Phase
+	ProposalIndex U32
+	Amount        U128
+	Beneficiary   AccountID
+	Topics        []Hash
+}
+
+// EventTreasuryUpdatedInactive is emitted when the inactive funds of the pallet have been updated.
+type EventTreasuryUpdatedInactive struct {
+	Phase       Phase
+	Reactivated U128
+	Deactivated U128
+	Topics      []Hash
 }
 
 // EventTipsNewTip is emitted when a new tip suggestion has been opened.

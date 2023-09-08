@@ -25,34 +25,56 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 )
 
+type Tuple struct {
+	Start  U32
+	Offset U32
+}
+type AppId UCompact
+
+type DataLookupIndexItem struct {
+	AppId AppId `json:"app_id"`
+	Start Value `json:"start"`
+}
 type DataLookup struct {
-	Size  U32      `json:"size"`
-	Index [][2]U32 `json:"index"`
+	Size  UCompact              `json:"size"`
+	Index []DataLookupIndexItem `json:"index"`
 }
 
 type KateCommitment struct {
-	Rows       UCompact `json:"rows"`
-	Cols       UCompact `json:"cols"`
-	DataRoot   Hash     `json:"dataRoot"`
-	Commitment []U8     `json:"commitment"`
+	Rows       Value `json:"rows"`
+	Cols       Value `json:"cols"`
+	DataRoot   Hash  `json:"dataRoot"`
+	Commitment []U8  `json:"commitment"`
+}
+type KateCommitmentV2 struct {
+	Rows       Value `json:"rows"`
+	Cols       Value `json:"cols"`
+	DataRoot   *Hash `json:"dataRoot"`
+	Commitment []U8  `json:"commitment"`
 }
 
 type V1HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"appLookup"`
+	AppLookup  DataLookup     `json:"app_lookup"`
+}
+type V2HeaderExtension struct {
+	Commitment KateCommitment `json:"commitment"`
+	AppLookup  DataLookup     `json:"app_lookup"`
 }
 type VTHeaderExtension struct {
 	NewField   []U8           `json:"newField"`
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"appLookup"`
+	AppLookup  DataLookup     `json:"app_lookup"`
 }
+
 type HeaderExtensionEnum struct {
-	V1    V1HeaderExtension `json:"V1"`
-	VTest VTHeaderExtension `json:"VTest"`
+	V1 V1HeaderExtension `json:"V1"`
+	// V2    V2HeaderExtension `json:"V2"`
+	// VTest VTHeaderExtension `json:"VTest"`
 }
 
 type HeaderExtension struct {
-	Enum HeaderExtensionEnum `json:"HeaderExtension"`
+	V1 V1HeaderExtension `json:"HeaderExtension"`
 }
 
 type Header struct {
@@ -66,7 +88,7 @@ type Header struct {
 
 type BlockNumber U32
 
-type AppId UCompact
+type Value UCompact
 
 // UnmarshalJSON fills BlockNumber with the JSON encoded byte array given by bz
 func (b *BlockNumber) UnmarshalJSON(bz []byte) error {
@@ -112,3 +134,46 @@ func (a AppId) Encode(encoder scale.Encoder) error {
 	u := UCompact(a)
 	return u.Encode(encoder)
 }
+
+func (a Value) Decode(decoder scale.Decoder) error {
+	u := UCompact(a)
+	return u.Decode(decoder)
+}
+
+func (a Value) Encode(encoder scale.Encoder) error {
+	u := UCompact(a)
+	return u.Encode(encoder)
+}
+
+func (v *Value) UnmarshalJSON(data []byte) error {
+	var tmp string
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+	s := strings.TrimPrefix(tmp, "0x")
+
+	p, err := strconv.ParseUint(s, 16, 32)
+
+	*v = Value(NewUCompactFromUInt((p)))
+	return err
+}
+
+func (v Value) MarshalJSON() ([]byte, error) {
+	u := UCompact(v)
+	i := u.Int64()
+	s := strconv.FormatUint(uint64(i), 16)
+	return json.Marshal(s)
+}
+
+// func (v Value) Encode(encoder scale.Encoder) error {
+// 	return encoder.EncodeUintCompact(big.Int(v))
+// }
+
+// func (v *Value) Decode(decoder scale.Decoder) error {
+// 	u, err := decoder.DecodeUintCompact()
+// 	if err != nil {
+// 		return err
+// 	}
+// 	*v = Value(NewUCompact(u))
+// 	return err
+// }

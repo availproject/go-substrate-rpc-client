@@ -59,3 +59,12 @@ func (u UCompact) Encode(encoder scale.Encoder) error {
 func (u UCompact) MarshalJSON() ([]byte, error) {
 	return json.Marshal(u.Int64())
 }
+
+func (u *UCompact) UnmarshalJSON(b []byte) error {
+	var i big.Int
+	if err := json.Unmarshal(b, &i); err != nil {
+		return err
+	}
+	*u = UCompact(i)
+	return nil
+}

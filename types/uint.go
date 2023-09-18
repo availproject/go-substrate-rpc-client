@@ -84,6 +84,7 @@ func (u *U32) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &tmp); err != nil {
 		return err
 	}
+	fmt.Printf(" UNMARSHAL UINT %v\n", tmp)
 	*u = U32(tmp)
 	return nil
 }

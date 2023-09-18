@@ -17,6 +17,8 @@
 package types_test
 
 import (
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"testing"
 
@@ -26,59 +28,78 @@ import (
 	. "github.com/centrifuge/go-substrate-rpc-client/v4/types/test_utils"
 )
 
-var exampleHeader = Header{
-	ParentHash:     Hash{1, 2, 3, 4, 5},
-	Number:         42,
-	StateRoot:      Hash{2, 3, 4, 5, 6},
-	ExtrinsicsRoot: Hash{3, 4, 5, 6, 7},
-	Digest: Digest{
-		{IsOther: true, AsOther: Bytes{4, 5}},
-		{IsChangesTrieRoot: true, AsChangesTrieRoot: Hash{6, 7}},
-		{IsConsensus: true, AsConsensus: Consensus{ConsensusEngineID: 9, Bytes: Bytes{10, 11, 12}}},
-		{IsSeal: true, AsSeal: Seal{ConsensusEngineID: 11, Bytes: Bytes{12, 13, 14}}},
-		{IsPreRuntime: true, AsPreRuntime: PreRuntime{ConsensusEngineID: 13, Bytes: Bytes{14, 15, 16}}},
-	},
+var exampleHeader Header
 
-	Extension: HeaderExtension{
-		Enum: HeaderExtensionEnum{
+func init() {
+
+	parent, _ := NewHashFromHexString("0x2390716cf47146b869ea093625bce79d6466622275c6e6c7572d7bdc173db88c")
+	stateRoot, _ := NewHashFromHexString("0x98e4ebfb4514857a3fb86c6f4aee55d1640f3005ede69ed186218a9870967d5c")
+	extrinsicRoot, _ := NewHashFromHexString("0x19e3798ba6d1b7ec0842d76c8f4c7eb25ce39e4e60a42c0350904aa910f82c90")
+	dataRoot, _ := NewHashFromHexString("0x0000000000000000000000000000000000000000000000000000000000000000")
+
+	preRuntime, _ := hex.DecodeString("0300000000b3350d050000000036239c4f99b0106087ee43817ed0bd1ddfaf43f4dff20b58582cb18ac1131f688bb33e1a51f4048f83e6ef39d623bc60c9314495801ac8d769073cbaabb2700618842b66414594c456b88d52fec4ff6e6cad68a2c39b5c78307cbd567ca2cf0f")
+	seal, _ := hex.DecodeString("18960a95b37451727f8d756d31f1b58f294adcfa3faaf45adb15d169be666e0fc587f290d910e5118b4470a5bd44500735434d052f965353bdd46d4ce18eef8a")
+
+	exampleHeader = Header{
+		ParentHash:     parent,
+		Number:         550,
+		StateRoot:      stateRoot,
+		ExtrinsicsRoot: extrinsicRoot,
+		Digest: Digest{
+			{IsPreRuntime: true, AsPreRuntime: PreRuntime{ConsensusEngineID: 1111573061, Bytes: NewBytes(preRuntime)}},
+			{IsSeal: true, AsSeal: Seal{ConsensusEngineID: 1111573061, Bytes: NewBytes(seal)}},
+		},
+
+		Extension: HeaderExtensionEnum{
 			V1: V1HeaderExtension{
 				Commitment: KateCommitment{
-					Rows:       NewUCompactFromUInt(4),
-					Cols:       NewUCompactFromUInt(1),
-					DataRoot:   Hash{8, 9, 10, 11, 12},
-					Commitment: []U8{1, 2, 3, 4},
+					Rows:     U16(1),
+					Cols:     U16(4),
+					DataRoot: dataRoot,
+					Commitment: []U8{
+						173, 99, 172, 161, 54, 91, 154, 130, 184, 238, 174, 6,
+						185, 233, 233, 199, 17, 95, 183, 53, 22, 43, 157, 129,
+						237, 94, 99, 21, 196, 218, 156, 88, 52, 137, 182, 181,
+						121, 252, 248, 74, 61, 232, 42, 129, 222, 67, 129, 85,
+						173, 99, 172, 161, 54, 91, 154, 130, 184, 238, 174, 6,
+						185, 233, 233, 199, 17, 95, 183, 53, 22, 43, 157, 129,
+						237, 94, 99, 21, 196, 218, 156, 88, 52, 137, 182, 181,
+						121, 252, 248, 74, 61, 232, 42, 129, 222, 67, 129, 85,
+					},
 				},
 				AppLookup: DataLookup{
 					Size: 1,
-					Index: [][2]U32{
-						[2]U32{
-							0, 1,
-						},
-					},
-				},
-			},
-			VTest: VTHeaderExtension{
-				NewField: []U8{1, 2, 3, 4, 5},
-				Commitment: KateCommitment{
-					Rows:       NewUCompactFromUInt(8),
-					Cols:       NewUCompactFromUInt(2),
-					DataRoot:   Hash{13, 14, 15, 16, 17},
-					Commitment: []U8{5, 6, 7, 8},
-				},
-				AppLookup: DataLookup{
-					Size: 1,
-					Index: [][2]U32{
-						[2]U32{
-							0, 1,
-						},
-					},
 				},
 			},
 		},
-	},
+	}
 }
 
-// var (
+func TestHeader_Encoded(t *testing.T) {
+
+	//vc, _ := json.Marshal(exampleHeader)
+	//fmt.Printf("%s\n", vc)
+
+	s, _ := json.MarshalIndent(exampleHeader, "", "   ")
+
+	fmt.Printf("%s\n", s)
+
+	v, _ := Encode(exampleHeader)
+
+	expected := Header{}
+	Decode(v, &expected)
+
+	fmt.Printf("%v\n", expected)
+
+	//for _, a := range v {
+	//	fmt.Printf("%v\n", a)
+	//}
+
+	//fmt.Printf("%v\n", v)
+
+}
+
+//0x// var (
 // 	headerFuzzOpts = digestItemFuzzOpts
 // )
 

@@ -52,11 +52,11 @@ type HeaderExtensionEnum struct {
 }
 
 type Header struct {
-	ParentHash     Hash        `json:"parentHash"`
-	Number         BlockNumber `json:"number"`
-	StateRoot      Hash        `json:"stateRoot"`
-	ExtrinsicsRoot Hash        `json:"extrinsicsRoot"`
-	Digest         Digest      `json:"digest"`
+	ParentHash Hash `json:"parentHash"`
+	//Number         BlockNumber `json:"number"`
+	StateRoot      Hash   `json:"stateRoot"`
+	ExtrinsicsRoot Hash   `json:"extrinsicsRoot"`
+	Digest         Digest `json:"digest"`
 	//Extension      HeaderExtensionEnum `json:"extension"`
 }
 

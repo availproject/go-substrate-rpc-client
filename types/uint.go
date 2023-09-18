@@ -80,6 +80,8 @@ func NewU32(u uint32) U32 {
 
 // UnmarshalJSON fills u with the JSON encoded byte array given by b
 func (u *U32) UnmarshalJSON(b []byte) error {
+	fmt.Printf(" UNMARSHAL UINT32 %v\n", b)
+
 	var tmp uint32
 	if err := json.Unmarshal(b, &tmp); err != nil {
 		return err

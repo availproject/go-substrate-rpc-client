@@ -18,6 +18,7 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/big"
 	"strconv"
 	"strings"
@@ -52,7 +53,7 @@ type HeaderExtensionEnum struct {
 
 type Header struct {
 	ParentHash     Hash                `json:"parentHash"`
-	Number         U32                 `json:"number"`
+	Number         BlockNumber         `json:"number"`
 	StateRoot      Hash                `json:"stateRoot"`
 	ExtrinsicsRoot Hash                `json:"extrinsicsRoot"`
 	Digest         Digest              `json:"digest"`
@@ -66,13 +67,20 @@ type BlockNumber uint32
 // UnmarshalJSON fills BlockNumber with the JSON encoded byte array given by bz
 func (b *BlockNumber) UnmarshalJSON(bz []byte) error {
 	var tmp string
+	fmt.Printf("Block number bytes: %v\n", bz)
+
 	if err := json.Unmarshal(bz, &tmp); err != nil {
 		return err
 	}
 
+	fmt.Printf("Block number: %v\n", tmp)
+
 	s := strings.TrimPrefix(tmp, "0x")
 
 	p, err := strconv.ParseUint(s, 16, 32)
+
+	fmt.Printf("Block number: %v\n", p)
+
 	*b = BlockNumber(p)
 	return err
 }

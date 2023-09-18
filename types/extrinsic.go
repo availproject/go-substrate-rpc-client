@@ -351,7 +351,7 @@ type Justification Bytes
 type SignaturePayload struct {
 	Address        Address
 	BlockHash      Hash
-	BlockNumber    BlockNumber
+	BlockNumber    UCompact
 	Era            ExtrinsicEra
 	GenesisHash    Hash
 	Method         Call

@@ -42,7 +42,7 @@ func init() {
 
 	exampleHeader = Header{
 		ParentHash:     parent,
-		Number:         NewU32(550),
+		Number:         BlockNumber(550),
 		StateRoot:      stateRoot,
 		ExtrinsicsRoot: extrinsicRoot,
 		Digest: Digest{
@@ -84,12 +84,14 @@ func TestHeader_Encoded(t *testing.T) {
 
 	fmt.Printf("%s\n", s)
 
-	v, _ := Encode(exampleHeader)
+	v, _ := Encode(exampleHeader.Digest)
 
-	expected := Header{}
+	fmt.Printf("%+v\n", v)
+
+	expected := Digest{}
 	Decode(v, &expected)
 
-	fmt.Printf("%v\n", expected)
+	fmt.Printf("%+v\n", expected)
 
 	//for _, a := range v {
 	//	fmt.Printf("%v\n", a)

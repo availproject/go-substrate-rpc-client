@@ -18,6 +18,7 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/big"
 	"strconv"
 	"strings"
@@ -30,6 +31,7 @@ type Tuple struct {
 	Offset U32
 }
 type AppId UCompact
+type Value UCompact
 
 type DataLookupIndexItem struct {
 	AppId AppId `json:"app_id"`
@@ -88,10 +90,9 @@ type Header struct {
 
 type BlockNumber U32
 
-type Value UCompact
-
 // UnmarshalJSON fills BlockNumber with the JSON encoded byte array given by bz
 func (b *BlockNumber) UnmarshalJSON(bz []byte) error {
+	fmt.Println("umnarshal block number")
 	var tmp string
 	if err := json.Unmarshal(bz, &tmp); err != nil {
 		return err
@@ -106,17 +107,20 @@ func (b *BlockNumber) UnmarshalJSON(bz []byte) error {
 
 // MarshalJSON returns a JSON encoded byte array of BlockNumber
 func (b BlockNumber) MarshalJSON() ([]byte, error) {
+	fmt.Println("marshal block number")
 	s := strconv.FormatUint(uint64(b), 16)
 	return json.Marshal(s)
 }
 
 // Encode implements encoding for BlockNumber, which just unwraps the bytes of BlockNumber
 func (b BlockNumber) Encode(encoder scale.Encoder) error {
+	fmt.Println("encode block number")
 	return encoder.EncodeUintCompact(*big.NewInt(0).SetUint64(uint64(b)))
 }
 
 // Decode implements decoding for BlockNumber, which just wraps the bytes in BlockNumber
 func (b *BlockNumber) Decode(decoder scale.Decoder) error {
+	fmt.Println("decode block number")
 	u, err := decoder.DecodeUintCompact()
 	if err != nil {
 		return err
@@ -126,54 +130,65 @@ func (b *BlockNumber) Decode(decoder scale.Decoder) error {
 }
 
 func (a AppId) Decode(decoder scale.Decoder) error {
+	fmt.Println("decode app id")
 	u := UCompact(a)
 	return u.Decode(decoder)
 }
 
 func (a AppId) Encode(encoder scale.Encoder) error {
+	fmt.Println("encode app id")
 	u := UCompact(a)
 	return u.Encode(encoder)
 }
 
-func (a Value) Decode(decoder scale.Decoder) error {
-	u := UCompact(a)
-	return u.Decode(decoder)
-}
+// func (a *Value) Decode(decoder scale.Decoder) error {
+// 	fmt.Println("decode value")
+// 	u := UCompact(*a)
+// 	return u.Decode(decoder)
+// 	// ui, err := decoder.DecodeUintCompact()
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
 
-func (a Value) Encode(encoder scale.Encoder) error {
-	u := UCompact(a)
-	return u.Encode(encoder)
-}
-
-func (v *Value) UnmarshalJSON(data []byte) error {
-	var tmp string
-	if err := json.Unmarshal(data, &tmp); err != nil {
-		return err
-	}
-	s := strings.TrimPrefix(tmp, "0x")
-
-	p, err := strconv.ParseUint(s, 16, 32)
-
-	*v = Value(NewUCompactFromUInt((p)))
-	return err
-}
-
-func (v Value) MarshalJSON() ([]byte, error) {
-	u := UCompact(v)
-	i := u.Int64()
-	s := strconv.FormatUint(uint64(i), 16)
-	return json.Marshal(s)
-}
-
-// func (v Value) Encode(encoder scale.Encoder) error {
-// 	return encoder.EncodeUintCompact(big.Int(v))
+// 	// *a = Value(*ui)
+// 	// return nil
 // }
 
-// func (v *Value) Decode(decoder scale.Decoder) error {
-// 	u, err := decoder.DecodeUintCompact()
-// 	if err != nil {
+// func (a Value) Encode(encoder scale.Encoder) error {
+// 	fmt.Println("encode value")
+// 	u := UCompact(a)
+// 	return u.Encode(encoder)
+// 	// err := encoder.EncodeUintCompact(big.Int(a))
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
+// 	// return nil
+// }
+
+// func (v *Value) UnmarshalJSON(data []byte) error {
+// 	fmt.Println("unmarshal value")
+// 	var tmp string
+// 	if err := json.Unmarshal(data, &tmp); err != nil {
 // 		return err
 // 	}
-// 	*v = Value(NewUCompact(u))
-// 	return err
+// 	s := strings.TrimPrefix(tmp, "0x")
+
+// 	value := new(big.Int)
+// 	if _, ok := value.SetString(s, 16); !ok {
+// 		return fmt.Errorf("failed to parse UCompact value")
+// 	}
+// 	fmt.Println("value", value)
+// 	*v = Value(NewUCompact(value))
+// 	return nil
 // }
+
+//	func (v Value) MarshalJSON() ([]byte, error) {
+//		u := UCompact(v)
+//		// i := u.Int64()
+//		// s := strconv.FormatUint(uint64(i), 16)
+//		return u.MarshalJSON()
+//		// i := big.Int(v)
+//		// return json.Marshal(i.Int64())
+//	}
+//
+// MarshalJSON implements the json.Marshaler interface for HeaderExtension.

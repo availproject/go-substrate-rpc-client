@@ -52,7 +52,7 @@ type HeaderExtensionEnum struct {
 
 type Header struct {
 	ParentHash     Hash                `json:"parentHash"`
-	Number         uint32              `json:"number"`
+	Number         U32                 `json:"number"`
 	StateRoot      Hash                `json:"stateRoot"`
 	ExtrinsicsRoot Hash                `json:"extrinsicsRoot"`
 	Digest         Digest              `json:"digest"`

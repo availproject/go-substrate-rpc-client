@@ -42,7 +42,7 @@ func init() {
 
 	exampleHeader = Header{
 		ParentHash:     parent,
-		Number:         550,
+		Number:         NewU32(550),
 		StateRoot:      stateRoot,
 		ExtrinsicsRoot: extrinsicRoot,
 		Digest: Digest{

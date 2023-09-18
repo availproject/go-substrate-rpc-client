@@ -18,8 +18,8 @@ package types_test
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
+	gsrpc "github.com/centrifuge/go-substrate-rpc-client/v4"
 	"testing"
 
 	. "github.com/centrifuge/go-substrate-rpc-client/v4/types"
@@ -32,85 +32,95 @@ var exampleHeader Header
 
 func init() {
 
-	parent, _ := NewHashFromHexString("0x2390716cf47146b869ea093625bce79d6466622275c6e6c7572d7bdc173db88c")
-	stateRoot, _ := NewHashFromHexString("0x98e4ebfb4514857a3fb86c6f4aee55d1640f3005ede69ed186218a9870967d5c")
-	extrinsicRoot, _ := NewHashFromHexString("0x19e3798ba6d1b7ec0842d76c8f4c7eb25ce39e4e60a42c0350904aa910f82c90")
-	//dataRoot, _ := NewHashFromHexString("0x0000000000000000000000000000000000000000000000000000000000000000")
+	parent, _ := NewHashFromHexString("0x62079bb733a35bd2a22b317162aac307120b02625fdf861f6d88fc08be791de1")
+	stateRoot, _ := NewHashFromHexString("0xa1640c227c7a47e160b49a66f867e0fe12a26a3143c420d61409290fc831f4bf")
+	extrinsicRoot, _ := NewHashFromHexString("0x869ca1df4fb4440a46929c8cb222d27097f849cc0db3d4cf33f4da1002978029")
+	dataRoot, _ := NewHashFromHexString("0x0000000000000000000000000000000000000000000000000000000000000000")
 
-	preRuntime, _ := hex.DecodeString("0300000000b3350d050000000036239c4f99b0106087ee43817ed0bd1ddfaf43f4dff20b58582cb18ac1131f688bb33e1a51f4048f83e6ef39d623bc60c9314495801ac8d769073cbaabb2700618842b66414594c456b88d52fec4ff6e6cad68a2c39b5c78307cbd567ca2cf0f")
-	seal, _ := hex.DecodeString("18960a95b37451727f8d756d31f1b58f294adcfa3faaf45adb15d169be666e0fc587f290d910e5118b4470a5bd44500735434d052f965353bdd46d4ce18eef8a")
+	preRuntime, _ := hex.DecodeString("030000000011380d0500000000f006817ae13bca7d6c4aa181dfeba9231c561b1c8c1406437628f36b297d1b2d58103553567a1b32d5a2156821890da374ca899aad7ef6e1e361accc3ef8fb055e601d47bbda615d6f9776bb40ecdf4127f4206af1523d2444fafeeb8aa2b003")
+	seal, _ := hex.DecodeString("58dea98afbcffcfdb6f066728224d5e2e43f45ec38a257e0eb09f370d24af17286d13e341f4f78721614e9873a91f59169fccd256642195e6ef65e7088b44e83")
+
+	fmt.Printf("%v\n", preRuntime)
 
 	exampleHeader = Header{
 		ParentHash: parent,
-		//Number:         BlockNumber(550),
+		//Number:         UCompact(big.NewInt(16777215)),
 		StateRoot:      stateRoot,
 		ExtrinsicsRoot: extrinsicRoot,
 		Digest: Digest{
-			{IsPreRuntime: true, AsPreRuntime: PreRuntime{ConsensusEngineID: 1111573061, Bytes: NewBytes(preRuntime)}},
-			{IsSeal: true, AsSeal: Seal{ConsensusEngineID: 1111573061, Bytes: NewBytes(seal)}},
+			//{IsChangesTrieRoot: true,
+			//	AsChangesTrieRoot: stateRoot,
+			//},
+			//
+			{IsPreRuntime: true, AsPreRuntime: PreRuntime{ConsensusEngineID: 1111573061, Bytes: preRuntime}},
+			{IsSeal: true, AsSeal: Seal{ConsensusEngineID: 1111573061, Bytes: seal}},
 		},
 
-		//Extension: HeaderExtensionEnum{
-		//	V1: V1HeaderExtension{
-		//		Commitment: KateCommitment{
-		//			Rows:     U16(1),
-		//			Cols:     U16(4),
-		//			DataRoot: dataRoot,
-		//			Commitment: []U8{
-		//				173, 99, 172, 161, 54, 91, 154, 130, 184, 238, 174, 6,
-		//				185, 233, 233, 199, 17, 95, 183, 53, 22, 43, 157, 129,
-		//				237, 94, 99, 21, 196, 218, 156, 88, 52, 137, 182, 181,
-		//				121, 252, 248, 74, 61, 232, 42, 129, 222, 67, 129, 85,
-		//				173, 99, 172, 161, 54, 91, 154, 130, 184, 238, 174, 6,
-		//				185, 233, 233, 199, 17, 95, 183, 53, 22, 43, 157, 129,
-		//				237, 94, 99, 21, 196, 218, 156, 88, 52, 137, 182, 181,
-		//				121, 252, 248, 74, 61, 232, 42, 129, 222, 67, 129, 85,
-		//			},
-		//		},
-		//		AppLookup: DataLookup{
-		//			Size: 1,
-		//		},
-		//	},
-		//},
+		Extension: HeaderExtensionEnum{
+			V1: V1HeaderExtension{
+				Commitment: KateCommitment{
+					Rows:     U16(1),
+					Cols:     U16(1),
+					DataRoot: dataRoot,
+					Commitment: []U8{
+						69,
+					},
+				},
+				AppLookup: DataLookup{
+					Size: 1,
+				},
+			},
+		},
 	}
 }
 
+// parent hash
+
 func TestHeader_Encoded(t *testing.T) {
-
-	//vc, _ := json.Marshal(exampleHeader)
-	//fmt.Printf("%s\n", vc)
-
-	s, _ := json.MarshalIndent(exampleHeader, "", "   ")
-
-	fmt.Printf("%s\n", s)
-
-	v, _ := Encode(exampleHeader.Digest)
-
-	fmt.Printf("%+v\n", v)
-
-	expected := Digest{}
-	Decode(v, &expected)
-
-	fmt.Printf("%+v\n", expected)
-
-	//for _, a := range v {
-	//	fmt.Printf("%v\n", a)
+	//val, err := Encode(exampleHeader)
+	//if err != nil {
+	//	fmt.Errorf("Error %v\n", err)
 	//}
 
-	//fmt.Printf("%v\n", v)
+	//e := U8(255)
+	val, _ := EncodeToHex(exampleHeader.Digest)
+	//val1, _ := Encode(exampleHeader.Digest[1])
+	//var bn BlockNumber
+	//_ = Decode(val1, &bn)
+	//fmt.Printf("%+v\n", bn)
+	fmt.Printf("%+v\n", val)
+
+	api, err := gsrpc.NewSubstrateAPI("ws://127.0.0.1:9944")
+	if err != nil {
+		fmt.Printf("cannot get api:%v", err)
+	}
+
+	b1, _ := hex.DecodeString("0eebb9a3bc45691069710d554567b1166c09798790dcd23be45bc5f851e7c563")
+	h256 := NewH256(b1)
+	header, err := api.RPC.Chain.GetHeader(Hash(h256))
+	if err != nil {
+		fmt.Printf("error:%v", err)
+	}
+
+	fmt.Printf("%+v\n", header)
+
+	s, _ := EncodeToHex(header.Digest[0].AsPreRuntime.Bytes)
+	b, _ := EncodeToHex(header.Digest[0].AsPreRuntime.ConsensusEngineID)
+	fmt.Printf("%+v\n", s)
+	fmt.Printf("%+v\n", b)
+
+	s2, _ := EncodeToHex(header.Digest[1].AsSeal.ConsensusEngineID)
+	b2, _ := EncodeToHex(header.Digest[1].AsSeal.Bytes)
+	fmt.Printf("%+v\n", s2)
+	fmt.Printf("%+v\n", b2)
+
+	final, _ := EncodeToHex(header)
+
+	fmt.Printf("%+v\n", final)
+	//assert.Equal(t, "0x62079bb733a35bd2a22b317162aac307120b02625fdf861f6d88fc08be791de11112a1640c227c7a47e160b49a66f867e0fe12a26a3143c420d61409290fc831f4bf869ca1df4fb4440a46929c8cb222d27097f849cc0db3d4cf33f4da1002978029080642414245b501030000000011380d0500000000f006817ae13bca7d6c4aa181dfeba9231c561b1c8c1406437628f36b297d1b2d58103553567a1b32d5a2156821890da374ca899aad7ef6e1e361accc3ef8fb055e601d47bbda615d6f9776bb40ecdf4127f4206af1523d2444fafeeb8aa2b0030542414245010158dea98afbcffcfdb6f066728224d5e2e43f45ec38a257e0eb09f370d24af17286d13e341f4f78721614e9873a91f59169fccd256642195e6ef65e7088b44e830004100000000000000000000000000000000000000000000000000000000000000000810198d4ae4db42d766695fa9ed3a5415460cd497cc497f96955e75d3e39881faa70468cf3683c9196a7b74878319542ecb098d4ae4db42d766695fa9ed3a5415460cd497cc497f96955e75d3e39881faa70468cf3683c9196a7b74878319542ecb00400",
+	//	hex)
 
 }
-
-//0x// var (
-// 	headerFuzzOpts = digestItemFuzzOpts
-// )
-
-// func TestHeader_EncodeDecode(t *testing.T) {
-// 	AssertRoundtrip(t, exampleHeader)
-// 	AssertRoundTripFuzz[Header](t, 100, headerFuzzOpts...)
-// 	AssertDecodeNilData[Header](t)
-// 	AssertEncodeEmptyObj[Header](t, 98)
-// }
 
 func TestHeader_EncodedLength(t *testing.T) {
 	AssertEncodedLength(t, []EncodedLengthAssert{{Input: exampleHeader, Expected: 272}})

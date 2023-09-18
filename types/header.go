@@ -16,6 +16,14 @@
 
 package types
 
+import (
+	"encoding/json"
+	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
+	"math/big"
+	"strconv"
+	"strings"
+)
+
 type DataLookup struct {
 	Size  U32      `json:"size"`
 	Index [][2]U32 `json:"index"`
@@ -42,10 +50,47 @@ type HeaderExtensionEnum struct {
 }
 
 type Header struct {
-	ParentHash     Hash     `json:"parentHash"`
-	Number         UCompact `json:"number"`
-	StateRoot      Hash     `json:"stateRoot"`
-	ExtrinsicsRoot Hash     `json:"extrinsicsRoot"`
-	Digest         Digest   `json:"digest"`
-	//Extension      HeaderExtensionEnum `json:"extension"`
+	ParentHash     Hash                `json:"parentHash"`
+	Number         BlockNumber         `json:"number"`
+	StateRoot      Hash                `json:"stateRoot"`
+	ExtrinsicsRoot Hash                `json:"extrinsicsRoot"`
+	Digest         Digest              `json:"digest"`
+	Extension      HeaderExtensionEnum `json:"extension"`
+}
+
+type BlockNumber U32
+
+// UnmarshalJSON fills BlockNumber with the JSON encoded byte array given by bz
+func (b *BlockNumber) UnmarshalJSON(bz []byte) error {
+	var tmp string
+	if err := json.Unmarshal(bz, &tmp); err != nil {
+		return err
+	}
+
+	s := strings.TrimPrefix(tmp, "0x")
+
+	p, err := strconv.ParseUint(s, 16, 32)
+	*b = BlockNumber(p)
+	return err
+}
+
+// MarshalJSON returns a JSON encoded byte array of BlockNumber
+func (b BlockNumber) MarshalJSON() ([]byte, error) {
+	s := strconv.FormatUint(uint64(b), 16)
+	return json.Marshal(s)
+}
+
+// Encode implements encoding for BlockNumber, which just unwraps the bytes of BlockNumber
+func (b BlockNumber) Encode(encoder scale.Encoder) error {
+	return encoder.EncodeUintCompact(*big.NewInt(0).SetUint64(uint64(b)))
+}
+
+// Decode implements decoding for BlockNumber, which just wraps the bytes in BlockNumber
+func (b *BlockNumber) Decode(decoder scale.Decoder) error {
+	u, err := decoder.DecodeUintCompact()
+	if err != nil {
+		return err
+	}
+	*b = BlockNumber(u.Uint64())
+	return err
 }

@@ -52,8 +52,6 @@ func (pe Encoder) Write(bytes []byte) error {
 		return err
 	}
 
-	fmt.Printf("Length written %v\n", c)
-
 	if c < len(bytes) {
 		return fmt.Errorf("Could not write %d bytes to writer", len(bytes))
 	}
@@ -128,13 +126,11 @@ func (pe Encoder) EncodeUintCompact(v big.Int) error {
 
 // Encode a value to the stream.
 func (pe Encoder) Encode(value interface{}) error {
-	t := reflect.TypeOf(value)
-	fmt.Printf("Type %v\n", t)
 
+	t := reflect.TypeOf(value)
 	// If the type implements encodeable, use that implementation
 	encodeable := reflect.TypeOf((*Encodeable)(nil)).Elem()
 	if t.Implements(encodeable) {
-		fmt.Printf("Implements %v\n", t)
 		err := value.(Encodeable).Encode(pe)
 		if err != nil {
 			return err

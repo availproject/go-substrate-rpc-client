@@ -85,7 +85,9 @@ func CallWithBlockHash(c Client, target interface{}, method string, blockHash *t
 		return err
 	}
 	args = append(args, hexHash)
+
 	err = c.Call(target, method, args...)
+
 	if err != nil {
 		return err
 	}

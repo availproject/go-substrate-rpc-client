@@ -59,15 +59,15 @@ func init() {
 		Extension: HeaderExtensionEnum{
 			V1: V1HeaderExtension{
 				Commitment: KateCommitment{
-					Rows:     U16(1),
-					Cols:     U16(1),
+					//Rows:     U16(1),
+					//Cols:     U16(1),
 					DataRoot: dataRoot,
 					Commitment: []U8{
 						69,
 					},
 				},
 				AppLookup: DataLookup{
-					Size: 1,
+					//Size: NewUCompactFromUInt(1),
 				},
 			},
 		},
@@ -77,18 +77,6 @@ func init() {
 // parent hash
 
 func TestHeader_Encoded(t *testing.T) {
-	//val, err := Encode(exampleHeader)
-	//if err != nil {
-	//	fmt.Errorf("Error %v\n", err)
-	//}
-
-	//e := U8(255)
-	val, _ := EncodeToHex(exampleHeader.Digest)
-	//val1, _ := Encode(exampleHeader.Digest[1])
-	//var bn BlockNumber
-	//_ = Decode(val1, &bn)
-	//fmt.Printf("%+v\n", bn)
-	fmt.Printf("%+v\n", val)
 
 	api, err := gsrpc.NewSubstrateAPI("wss://kate.avail.tools/ws")
 	if err != nil {
@@ -101,26 +89,67 @@ func TestHeader_Encoded(t *testing.T) {
 	if err != nil {
 		fmt.Printf("error:%v", err)
 	}
+	fmt.Printf("%v\n", header)
 
-	fmt.Printf("%+v\n", header)
-
-	s, _ := EncodeToHex(header.Digest[0].AsPreRuntime.Bytes)
-	b, _ := EncodeToHex(header.Digest[0].AsPreRuntime.ConsensusEngineID)
-	fmt.Printf("%+v\n", s)
-	fmt.Printf("%+v\n", b)
-
-	s2, _ := EncodeToHex(header.Digest[1].AsSeal.ConsensusEngineID)
-	b2, _ := EncodeToHex(header.Digest[1].AsSeal.Bytes)
-	fmt.Printf("%+v\n", s2)
-	fmt.Printf("%+v\n", b2)
-	fmt.Printf("NUMBER %+v\n", header.Number)
-
+	//rows, _ := EncodeToHex(header.Extension.V1.Commitment.Rows)
+	//fmt.Printf("ROWS %+v   %+v\n", rows, header.Extension.V1.Commitment.Rows)
+	//
+	//cols, _ := EncodeToHex(header.Extension.V1.Commitment.Cols)
+	//fmt.Printf("COLS %+v  %+v   \n", cols, header.Extension.V1.Commitment.Cols)
+	//
+	//dataLookUP, _ := EncodeToHex(header.Extension.V1.Commitment.Cols)
+	//fmt.Printf("DataLookUP %+v\n", dataLookUP)
+	//
+	//blockNumber, _ := EncodeToHex(header.Number)
+	//digest, _ := EncodeToHex(header.Digest)
+	//stateRoot, _ := EncodeToHex(header.StateRoot)
+	//extrinsicsRoot, _ := EncodeToHex(header.ExtrinsicsRoot)
+	//parentHash, _ := EncodeToHex(header.ParentHash)
+	//
+	//extension, _ := EncodeToHex(header.Extension)
+	//commitment, _ := EncodeToHex(header.Extension.V1.Commitment.Commitment)
+	//
+	//fmt.Printf("\n")
+	//fmt.Printf("Digest %+v\n", digest)
+	//fmt.Printf("State Root %+v\n", stateRoot)
+	//fmt.Printf("Extrinsics Root %+v\n", extrinsicsRoot)
+	//fmt.Printf("Block Number %+v\n", blockNumber)
+	//fmt.Printf("Parent Hash %+v\n", parentHash)
+	//fmt.Printf("Extension %+v\n", extension)
+	//fmt.Printf("Commitment %+v\n", commitment)
+	//
+	//rows, _ := EncodeToHex(header.Extension.V1.Commitment.Rows)
+	//cols, _ := EncodeToHex(header.Extension.V1.Commitment.Cols)
+	//
+	//fmt.Printf("rows %+v\n", rows)
+	//fmt.Printf("cols %+v\n", cols)
+	//size, _ := EncodeToHex(header.Extension.V1.AppLookup.Size)
+	//index, _ := EncodeToHex(header.Extension.V1.AppLookup.Index)
+	//fmt.Printf("Size %+v\n", size)
+	//fmt.Printf("Index %+v\n", index)
+	//
+	////
+	////Index, _ := EncodeToHex(header.Extension.V1.AppLookup.Index)
+	////size, _ := EncodeToHex(header.Extension.V1.AppLookup.Size)
+	////
+	//fmt.Printf("\n")
+	//
+	//fmt.Printf("dataLookup===\n")
+	//
+	////dataLookup, _ := EncodeToHex(header.Extension.V1.AppLookup)
+	//
+	////fmt.Printf("dataLookup %+v \n", dataLookup)
+	//
+	////fmt.Printf("Index %+v  %+v\n", Index, header.Extension.V1.AppLookup.Index)
+	////fmt.Printf("Size %+v  %+v\n", size, header.Extension.V1.AppLookup.Size)
+	////
+	////Commitment, _ := EncodeToHex(header.Extension.V1.Commitment.Commitment)
+	////fmt.Printf("Commitment %+v\n", Commitment)
+	////
 	final, _ := EncodeToHex(header)
-
+	//
 	fmt.Printf("%+v\n", final)
-	fmt.Printf("%+v\n", header.Number)
-	//assert.Equal(t, "0x62079bb733a35bd2a22b317162aac307120b02625fdf861f6d88fc08be791de11112a1640c227c7a47e160b49a66f867e0fe12a26a3143c420d61409290fc831f4bf869ca1df4fb4440a46929c8cb222d27097f849cc0db3d4cf33f4da1002978029080642414245b501030000000011380d0500000000f006817ae13bca7d6c4aa181dfeba9231c561b1c8c1406437628f36b297d1b2d58103553567a1b32d5a2156821890da374ca899aad7ef6e1e361accc3ef8fb055e601d47bbda615d6f9776bb40ecdf4127f4206af1523d2444fafeeb8aa2b0030542414245010158dea98afbcffcfdb6f066728224d5e2e43f45ec38a257e0eb09f370d24af17286d13e341f4f78721614e9873a91f59169fccd256642195e6ef65e7088b44e830004100000000000000000000000000000000000000000000000000000000000000000810198d4ae4db42d766695fa9ed3a5415460cd497cc497f96955e75d3e39881faa70468cf3683c9196a7b74878319542ecb098d4ae4db42d766695fa9ed3a5415460cd497cc497f96955e75d3e39881faa70468cf3683c9196a7b74878319542ecb00400",
-	//	hex)
+	//fmt.Printf("%+v\n", header.Number)
 
 }
 
@@ -152,3 +181,11 @@ func TestHeader_Eq(t *testing.T) {
 		{Input: exampleHeader, Other: NewBool(false), Expected: false},
 	})
 }
+
+// 6860 0044
+// 6860 0044
+
+//0x31516bef9a85638ad44629b191f8c2ddc57f4a303edc6c7d1c18342bb0672f65368f1b00c29f0a1e0f35005cfe165f3b4bb75abb992bdc601f4b277a95cd726b8ff62e402849cd29af8ee2dd78635e14e1db009d1fdb1ee80b10896c3ba4195b1839f53b080642414245b5010300000000f2430d0500000000febc484f0f37c41fbfb6d3d5a5e72512318bd046f17c5df1c84c9dccdb89a46b7e4b2aa5d3dfa18d3a28d9b0a0777d8187621fe07ae741b5491d90e63fb8040e03a4f7f411a83272644e59e0ffdfd5a61f20a036f673b7f2e802534a759d9a0005424142450101b42cbf49bd343d8ee50b9475d59812c1a005c4826f3d8e385635fc979f802308c2c2f31d71545427347f69dd6b9ef5dff5e11dc95c63706ebb7350da997c06860100100000000000000000000000000000000000000000000000000000000000000000008101b47c7ec08e8069b95d8fa80947b26c04d7ecc945913685659c22bb9d506c070ed9c103c3970336a622e27924e787298fb47c7ec08e8069b95d8fa80947b26c04d7ecc945913685659c22bb9d506c070ed9c103c3970336a622e27924e787298f0000
+//0x31516bef9a85638ad44629b191f8c2ddc57f4a303edc6c7d1c18342bb0672f65368f1b00c29f0a1e0f35005cfe165f3b4bb75abb992bdc601f4b277a95cd726b8ff62e402849cd29af8ee2dd78635e14e1db009d1fdb1ee80b10896c3ba4195b1839f53b080642414245b5010300000000f2430d0500000000febc484f0f37c41fbfb6d3d5a5e72512318bd046f17c5df1c84c9dccdb89a46b7e4b2aa5d3dfa18d3a28d9b0a0777d8187621fe07ae741b5491d90e63fb8040e03a4f7f411a83272644e59e0ffdfd5a61f20a036f673b7f2e802534a759d9a0005424142450101b42cbf49bd343d8ee50b9475d59812c1a005c4826f3d8e385635fc979f802308c2c2f31d71545427347f69dd6b9ef5dff5e11dc95c63706ebb7350da997c068600044000000000000000000000000000000000000000000000000000000000000000008101b47c7ec08e8069b95d8fa80947b26c04d7ecc945913685659c22bb9d506c070ed9c103c3970336a622e27924e787298fb47c7ec08e8069b95d8fa80947b26c04d7ecc945913685659c22bb9d506c070ed9c103c3970336a622e27924e787298f3c00
+
+//0440

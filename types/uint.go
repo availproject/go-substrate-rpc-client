@@ -58,6 +58,9 @@ func NewU16(u uint16) U16 {
 // UnmarshalJSON fills u with the JSON encoded byte array given by b
 func (u *U16) UnmarshalJSON(b []byte) error {
 	var tmp uint16
+
+	fmt.Printf("UnmarshalJSON U16 %b\n", b)
+
 	if err := json.Unmarshal(b, &tmp); err != nil {
 		return err
 	}

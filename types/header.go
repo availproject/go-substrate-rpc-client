@@ -19,6 +19,7 @@ package types
 import (
 	"encoding/json"
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
+	"math/big"
 	"strconv"
 	"strings"
 )
@@ -81,7 +82,7 @@ func (b BlockNumber) MarshalJSON() ([]byte, error) {
 
 // Encode implements encoding for BlockNumber, which just unwraps the bytes of BlockNumber
 func (b BlockNumber) Encode(encoder scale.Encoder) error {
-	return encoder.Encode(U32(b))
+	return encoder.EncodeUintCompact(*big.NewInt(0).SetUint64(uint64(b)))
 }
 
 // Decode implements decoding for BlockNumber, which just wraps the bytes in BlockNumber

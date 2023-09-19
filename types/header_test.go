@@ -90,12 +90,12 @@ func TestHeader_Encoded(t *testing.T) {
 	//fmt.Printf("%+v\n", bn)
 	fmt.Printf("%+v\n", val)
 
-	api, err := gsrpc.NewSubstrateAPI("ws://127.0.0.1:9944")
+	api, err := gsrpc.NewSubstrateAPI("wss://kate.avail.tools/ws")
 	if err != nil {
 		fmt.Printf("cannot get api:%v", err)
 	}
 
-	b1, _ := hex.DecodeString("0eebb9a3bc45691069710d554567b1166c09798790dcd23be45bc5f851e7c563")
+	b1, _ := hex.DecodeString("f340ebeb6a13913f58babae262d888132c99dfbd7ccc0113a9dbc27b4e7e9bbc")
 	h256 := NewH256(b1)
 	header, err := api.RPC.Chain.GetHeader(Hash(h256))
 	if err != nil {
@@ -113,6 +113,7 @@ func TestHeader_Encoded(t *testing.T) {
 	b2, _ := EncodeToHex(header.Digest[1].AsSeal.Bytes)
 	fmt.Printf("%+v\n", s2)
 	fmt.Printf("%+v\n", b2)
+	fmt.Printf("NUMBER %+v\n", header.Number)
 
 	final, _ := EncodeToHex(header)
 

@@ -61,11 +61,6 @@ type V2HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
 	AppLookup  DataLookup     `json:"app_lookup"`
 }
-type VTHeaderExtension struct {
-	NewField   []U8           `json:"newField"`
-	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"app_lookup"`
-}
 
 type HeaderExtensionEnum struct {
 	V1 V1HeaderExtension `json:"V1"`

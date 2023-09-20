@@ -79,9 +79,9 @@ func (m DigestItem) Encode(encoder scale.Encoder) error {
 	case m.IsOther:
 		err1 = encoder.PushByte(0)
 		err2 = encoder.Encode(m.AsOther)
-	case m.IsChangesTrieRoot:
-		err1 = encoder.PushByte(2)
-		err2 = encoder.Encode(m.AsChangesTrieRoot)
+	//case m.IsChangesTrieRoot:
+	//	err1 = encoder.PushByte(2)
+	//	err2 = encoder.Encode(m.AsChangesTrieRoot)
 	case m.IsConsensus:
 		err1 = encoder.PushByte(4)
 		err2 = encoder.Encode(m.AsConsensus)
@@ -91,9 +91,9 @@ func (m DigestItem) Encode(encoder scale.Encoder) error {
 	case m.IsPreRuntime:
 		err1 = encoder.PushByte(6)
 		err2 = encoder.Encode(m.AsPreRuntime)
-	case m.IsChangesTrieSignal:
-		err1 = encoder.PushByte(7)
-		err2 = encoder.Encode(m.AsChangesTrieSignal)
+		//case m.IsChangesTrieSignal:
+		//	err1 = encoder.PushByte(7)
+		//	err2 = encoder.Encode(m.AsChangesTrieSignal)
 	}
 
 	if err1 != nil {

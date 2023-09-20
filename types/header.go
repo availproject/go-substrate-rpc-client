@@ -34,8 +34,8 @@ type AppId UCompact
 type Value UCompact
 
 type DataLookupIndexItem struct {
-	AppId AppId `json:"app_id"`
-	Start Value `json:"start"`
+	AppId UCompact `json:"appId"`
+	Start UCompact `json:"start"`
 }
 type DataLookup struct {
 	Size  UCompact              `json:"size"`
@@ -43,21 +43,21 @@ type DataLookup struct {
 }
 
 type KateCommitment struct {
+	Rows       UCompact `json:"rows"`
+	Cols       UCompact `json:"cols"`
+	DataRoot   Hash     `json:"dataRoot"`
+	Commitment []U8     `json:"commitment"`
+}
+type KateCommitmentV2 struct {
 	Rows       Value `json:"rows"`
 	Cols       Value `json:"cols"`
 	DataRoot   Hash  `json:"dataRoot"`
 	Commitment []U8  `json:"commitment"`
 }
-type KateCommitmentV2 struct {
-	Rows       Value `json:"rows"`
-	Cols       Value `json:"cols"`
-	DataRoot   *Hash `json:"dataRoot"`
-	Commitment []U8  `json:"commitment"`
-}
 
 type V1HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"app_lookup"`
+	AppLookup  DataLookup     `json:"appLookup"`
 }
 type V2HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
@@ -80,12 +80,12 @@ type HeaderExtension struct {
 }
 
 type Header struct {
-	ParentHash     Hash            `json:"parentHash"`
-	Number         BlockNumber     `json:"number"`
-	StateRoot      Hash            `json:"stateRoot"`
-	ExtrinsicsRoot Hash            `json:"extrinsicsRoot"`
-	Digest         Digest          `json:"digest"`
-	Extension      HeaderExtension `json:"extension"`
+	ParentHash     Hash                `json:"parentHash"`
+	Number         BlockNumber         `json:"number"`
+	StateRoot      Hash                `json:"stateRoot"`
+	ExtrinsicsRoot Hash                `json:"extrinsicsRoot"`
+	Digest         Digest              `json:"digest"`
+	Extension      HeaderExtensionEnum `json:"extension"`
 }
 
 type BlockNumber U32
@@ -139,6 +139,21 @@ func (a AppId) Encode(encoder scale.Encoder) error {
 	fmt.Println("encode app id")
 	u := UCompact(a)
 	return u.Encode(encoder)
+}
+
+func (m HeaderExtension) Encode(encoder scale.Encoder) error {
+	var err, err1 error
+
+	err = encoder.PushByte(0)
+
+	if err != nil {
+		return err
+	}
+	err1 = encoder.Encode(m.V1)
+	if err1 != nil {
+		return err1
+	}
+	return nil
 }
 
 // func (a *Value) Decode(decoder scale.Decoder) error {

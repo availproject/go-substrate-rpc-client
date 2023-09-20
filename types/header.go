@@ -24,11 +24,17 @@ import (
 	"strings"
 )
 
+type Tuple struct {
+	Start  U32
+	Offset U32
+}
+type AppId UCompact
+type Value UCompact
+
 type DataLookupIndexItem struct {
 	AppId UCompact `json:"appId"`
 	Start UCompact `json:"start"`
 }
-
 type DataLookup struct {
 	Size  UCompact              `json:"size"`
 	Index []DataLookupIndexItem `json:"index"`
@@ -40,39 +46,46 @@ type KateCommitment struct {
 	DataRoot   Hash     `json:"dataRoot"`
 	Commitment []U8     `json:"commitment"`
 }
+type KateCommitmentV2 struct {
+	Rows       Value `json:"rows"`
+	Cols       Value `json:"cols"`
+	DataRoot   Hash  `json:"dataRoot"`
+	Commitment []U8  `json:"commitment"`
+}
 
 type V1HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
 	AppLookup  DataLookup     `json:"appLookup"`
 }
-
+type V2HeaderExtension struct {
+	Commitment KateCommitment `json:"commitment"`
+	AppLookup  DataLookup     `json:"app_lookup"`
+}
 type VTHeaderExtension struct {
 	NewField   []U8           `json:"newField"`
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"appLookup"`
+	AppLookup  DataLookup     `json:"app_lookup"`
 }
 
 type HeaderExtensionEnum struct {
-	V1 V1HeaderExtension `json:"v1"`
+	V1 V1HeaderExtension `json:"V1"`
+	// V2    V2HeaderExtension `json:"V2"`
+	// VTest VTHeaderExtension `json:"VTest"`
 }
 
-func (m V1HeaderExtension) Encode(encoder scale.Encoder) error {
-	var err error
+type HeaderExtension struct {
+	V1 V1HeaderExtension `json:"HeaderExtension"`
+}
 
-	err = encoder.PushByte(0)
+func (m HeaderExtensionEnum) Encode(encoder scale.Encoder) error {
+	_ = encoder.PushByte(0)
+	_ = encoder.Encode(m.V1)
+	return nil
+}
 
-	if err != nil {
-		return err
-	}
-	err2 := encoder.Encode(m.Commitment)
-	if err2 != nil {
-		return err2
-	}
-	err3 := encoder.Encode(m.AppLookup)
-	if err3 != nil {
-		return err3
-	}
-
+func (m *HeaderExtensionEnum) Decode(decoder scale.Decoder) error {
+	decoder.ReadOneByte()
+	decoder.Decode(m.V1)
 	return nil
 }
 

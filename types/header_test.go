@@ -74,82 +74,110 @@ func init() {
 	}
 }
 
+//V1 V1HeaderExtension `json:"v1"`
+
+type Ext struct {
+	Rows       UCompact
+	Cols       UCompact
+	DataRoot   Hash
+	Commitment []U8
+}
+
+type W struct {
+	E Ext
+}
+
 // parent hash
 
 func TestHeader_Encoded(t *testing.T) {
 
+	//ext := Ext{
+	//	Rows:     NewUCompactFromUInt(1),
+	//	Cols:     NewUCompactFromUInt(16),
+	//	DataRoot: NewHash([]byte{}),
+	//}
+	//
+	//w := W{
+	//	E: ext,
+	//}
+
+	//
+	//e, _ := EncodeToHex(w)
+	//fmt.Printf("%v\n", e)
+
+	//
 	api, err := gsrpc.NewSubstrateAPI("wss://kate.avail.tools/ws")
 	if err != nil {
 		fmt.Printf("cannot get api:%v", err)
 	}
-
+	//
 	b1, _ := hex.DecodeString("f340ebeb6a13913f58babae262d888132c99dfbd7ccc0113a9dbc27b4e7e9bbc")
 	h256 := NewH256(b1)
 	header, err := api.RPC.Chain.GetHeader(Hash(h256))
 	if err != nil {
 		fmt.Printf("error:%v", err)
 	}
-	fmt.Printf("%v\n", header)
+	fmt.Printf("%+v\n", header)
+
+	rows, _ := EncodeToHex(header.Extension.V1.Commitment.Rows)
+	fmt.Printf("ROWS %+v   %+v\n", rows, header.Extension.V1.Commitment.Rows)
+
+	cols, _ := EncodeToHex(header.Extension.V1.Commitment.Cols)
+	fmt.Printf("COLS %+v  %+v   \n", cols, header.Extension.V1.Commitment.Cols)
+
+	dataLookUP, _ := EncodeToHex(header.Extension.V1.Commitment.Cols)
+	fmt.Printf("DataLookUP %+v\n", dataLookUP)
+
+	blockNumber, _ := EncodeToHex(header.Number)
+	digest, _ := EncodeToHex(header.Digest)
+	stateRoot, _ := EncodeToHex(header.StateRoot)
+	extrinsicsRoot, _ := EncodeToHex(header.ExtrinsicsRoot)
+	parentHash, _ := EncodeToHex(header.ParentHash)
+
+	extension, _ := EncodeToHex(header.Extension)
+	commitment, _ := EncodeToHex(header.Extension.V1.Commitment.Commitment)
+
+	fmt.Printf("\n")
+	fmt.Printf("Digest %+v\n", digest)
+	fmt.Printf("State Root %+v\n", stateRoot)
+	fmt.Printf("Extrinsics Root %+v\n", extrinsicsRoot)
+	fmt.Printf("Block Number %+v\n", blockNumber)
+	fmt.Printf("Parent Hash %+v\n", parentHash)
+	fmt.Printf("Extension %+v\n", extension)
+	fmt.Printf("Commitment %+v\n", commitment)
 
 	//rows, _ := EncodeToHex(header.Extension.V1.Commitment.Rows)
-	//fmt.Printf("ROWS %+v   %+v\n", rows, header.Extension.V1.Commitment.Rows)
-	//
 	//cols, _ := EncodeToHex(header.Extension.V1.Commitment.Cols)
-	//fmt.Printf("COLS %+v  %+v   \n", cols, header.Extension.V1.Commitment.Cols)
+
+	fmt.Printf("rows %+v\n", rows)
+	fmt.Printf("cols %+v\n", cols)
+	size, _ := EncodeToHex(header.Extension.V1.AppLookup.Size)
+	index, _ := EncodeToHex(header.Extension.V1.AppLookup.Index)
+	fmt.Printf("Size %+v\n", size)
+	fmt.Printf("Index %+v\n", index)
+
 	//
-	//dataLookUP, _ := EncodeToHex(header.Extension.V1.Commitment.Cols)
-	//fmt.Printf("DataLookUP %+v\n", dataLookUP)
-	//
-	//blockNumber, _ := EncodeToHex(header.Number)
-	//digest, _ := EncodeToHex(header.Digest)
-	//stateRoot, _ := EncodeToHex(header.StateRoot)
-	//extrinsicsRoot, _ := EncodeToHex(header.ExtrinsicsRoot)
-	//parentHash, _ := EncodeToHex(header.ParentHash)
-	//
-	//extension, _ := EncodeToHex(header.Extension)
-	//commitment, _ := EncodeToHex(header.Extension.V1.Commitment.Commitment)
-	//
-	//fmt.Printf("\n")
-	//fmt.Printf("Digest %+v\n", digest)
-	//fmt.Printf("State Root %+v\n", stateRoot)
-	//fmt.Printf("Extrinsics Root %+v\n", extrinsicsRoot)
-	//fmt.Printf("Block Number %+v\n", blockNumber)
-	//fmt.Printf("Parent Hash %+v\n", parentHash)
-	//fmt.Printf("Extension %+v\n", extension)
-	//fmt.Printf("Commitment %+v\n", commitment)
-	//
-	//rows, _ := EncodeToHex(header.Extension.V1.Commitment.Rows)
-	//cols, _ := EncodeToHex(header.Extension.V1.Commitment.Cols)
-	//
-	//fmt.Printf("rows %+v\n", rows)
-	//fmt.Printf("cols %+v\n", cols)
+	//Index, _ := EncodeToHex(header.Extension.V1.AppLookup.Index)
 	//size, _ := EncodeToHex(header.Extension.V1.AppLookup.Size)
-	//index, _ := EncodeToHex(header.Extension.V1.AppLookup.Index)
-	//fmt.Printf("Size %+v\n", size)
-	//fmt.Printf("Index %+v\n", index)
 	//
-	////
-	////Index, _ := EncodeToHex(header.Extension.V1.AppLookup.Index)
-	////size, _ := EncodeToHex(header.Extension.V1.AppLookup.Size)
-	////
-	//fmt.Printf("\n")
+	fmt.Printf("\n")
+
+	fmt.Printf("dataLookup===\n")
+
+	//dataLookup, _ := EncodeToHex(header.Extension.V1.AppLookup)
+
+	//fmt.Printf("dataLookup %+v \n", dataLookup)
+
+	//fmt.Printf("Index %+v  %+v\n", Index, header.Extension.V1.AppLookup.Index)
+	//fmt.Printf("Size %+v  %+v\n", size, header.Extension.V1.AppLookup.Size)
 	//
-	//fmt.Printf("dataLookup===\n")
+	//Commitment, _ := EncodeToHex(header.Extension.V1.Commitment.Commitment)
+	//fmt.Printf("Commitment %+v\n", Commitment)
 	//
-	////dataLookup, _ := EncodeToHex(header.Extension.V1.AppLookup)
-	//
-	////fmt.Printf("dataLookup %+v \n", dataLookup)
-	//
-	////fmt.Printf("Index %+v  %+v\n", Index, header.Extension.V1.AppLookup.Index)
-	////fmt.Printf("Size %+v  %+v\n", size, header.Extension.V1.AppLookup.Size)
-	////
-	////Commitment, _ := EncodeToHex(header.Extension.V1.Commitment.Commitment)
-	////fmt.Printf("Commitment %+v\n", Commitment)
-	////
 	final, _ := EncodeToHex(header)
-	//
+
 	fmt.Printf("%+v\n", final)
-	//fmt.Printf("%+v\n", header.Number)
+	fmt.Printf("%+v\n", header.Number)
 
 }
 
@@ -189,3 +217,12 @@ func TestHeader_Eq(t *testing.T) {
 //0x31516bef9a85638ad44629b191f8c2ddc57f4a303edc6c7d1c18342bb0672f65368f1b00c29f0a1e0f35005cfe165f3b4bb75abb992bdc601f4b277a95cd726b8ff62e402849cd29af8ee2dd78635e14e1db009d1fdb1ee80b10896c3ba4195b1839f53b080642414245b5010300000000f2430d0500000000febc484f0f37c41fbfb6d3d5a5e72512318bd046f17c5df1c84c9dccdb89a46b7e4b2aa5d3dfa18d3a28d9b0a0777d8187621fe07ae741b5491d90e63fb8040e03a4f7f411a83272644e59e0ffdfd5a61f20a036f673b7f2e802534a759d9a0005424142450101b42cbf49bd343d8ee50b9475d59812c1a005c4826f3d8e385635fc979f802308c2c2f31d71545427347f69dd6b9ef5dff5e11dc95c63706ebb7350da997c068600044000000000000000000000000000000000000000000000000000000000000000008101b47c7ec08e8069b95d8fa80947b26c04d7ecc945913685659c22bb9d506c070ed9c103c3970336a622e27924e787298fb47c7ec08e8069b95d8fa80947b26c04d7ecc945913685659c22bb9d506c070ed9c103c3970336a622e27924e787298f3c00
 
 //0440
+//0440
+
+// ======
+// so I was debugging the gsrpc decoding  issue
+// and from header extension  in commitment struct rows and colums encoding has some issue  // has an issue kailas can talk more about that
+// also had a brainstorimg session with prabal about token bridge
+// and I started creating some interfaces and the flow for the transfers and how will that work
+// but that is still in the early phase
+// =======

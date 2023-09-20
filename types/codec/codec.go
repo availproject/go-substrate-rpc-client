@@ -48,6 +48,8 @@ func EncodeToHex(value interface{}) (string, error) {
 		return "", err
 	}
 
+	fmt.Printf("%+v\n", bz)
+
 	return fmt.Sprintf("%#x", bz), nil
 }
 

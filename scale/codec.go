@@ -38,10 +38,10 @@ const maxInt = int(maxUint >> 1)
 // Encoder is a wrapper around a Writer that allows encoding data items to a stream.
 // Allows passing encoding options
 type Encoder struct {
-	writer io.Writer
+	writer io.ReadWriter
 }
 
-func NewEncoder(writer io.Writer) *Encoder {
+func NewEncoder(writer io.ReadWriter) *Encoder {
 	return &Encoder{writer: writer}
 }
 
@@ -78,7 +78,6 @@ func (pe Encoder) EncodeUintCompact(v big.Int) error {
 	if v.Sign() == -1 {
 		return errors.New("Assertion error: EncodeUintCompact cannot process negative numbers")
 	}
-
 	if v.IsUint64() {
 		if v.Uint64() < 1<<30 {
 			if v.Uint64() < 1<<6 {
@@ -87,16 +86,23 @@ func (pe Encoder) EncodeUintCompact(v big.Int) error {
 					return err
 				}
 			} else if v.Uint64() < 1<<14 {
+
+				//fmt.Printf("Writing number uint16 %v\n", binary.LittleEndian.Uint16())
+				//000440
+				//  0440
 				err := binary.Write(pe.writer, binary.LittleEndian, uint16(v.Uint64()<<2)+1)
+
 				if err != nil {
 					return err
 				}
 			} else {
+
 				err := binary.Write(pe.writer, binary.LittleEndian, uint32(v.Uint64()<<2)+2)
 				if err != nil {
 					return err
 				}
 			}
+
 			return nil
 		}
 	}
@@ -140,6 +146,11 @@ func (pe Encoder) Encode(value interface{}) error {
 		//fmt.Printf("Does not implement encodable %v\n", t)
 	}
 	tk := t.Kind()
+
+	if reflect.Bool == tk {
+		fmt.Printf("Bool value detected")
+	}
+
 	switch tk {
 
 	// Boolean and numbers are trivially encoded via binary.Write

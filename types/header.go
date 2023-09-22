@@ -34,7 +34,7 @@ type AppId UCompact
 type Value UCompact
 
 type DataLookupIndexItem struct {
-	AppId UCompact `json:"appId"`
+	AppId UCompact `json:"app_id"`
 	Start UCompact `json:"start"`
 }
 type DataLookup struct {
@@ -57,7 +57,7 @@ type KateCommitmentV2 struct {
 
 type V1HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"appLookup"`
+	AppLookup  DataLookup     `json:"app_lookup"`
 }
 type V2HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
@@ -141,7 +141,8 @@ func (a AppId) Encode(encoder scale.Encoder) error {
 	return u.Encode(encoder)
 }
 
-func (m HeaderExtension) Encode(encoder scale.Encoder) error {
+func (m HeaderExtensionEnum) Encode(encoder scale.Encoder) error {
+	fmt.Println("encode header extension")
 	var err, err1 error
 
 	err = encoder.PushByte(0)
@@ -153,6 +154,24 @@ func (m HeaderExtension) Encode(encoder scale.Encoder) error {
 	if err1 != nil {
 		return err1
 	}
+	return nil
+}
+
+func (m *HeaderExtensionEnum) Decode(decoder scale.Decoder) error {
+	fmt.Println("decode header extension")
+	b, err := decoder.ReadOneByte()
+
+	if err != nil {
+		return err
+	}
+
+	if b == 0 {
+		err = decoder.Decode(&m.V1)
+	}
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

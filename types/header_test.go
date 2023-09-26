@@ -26,7 +26,6 @@ import (
 	. "github.com/centrifuge/go-substrate-rpc-client/v4/types/test_utils"
 )
 
-
 var exampleHeader = Header{
 	ParentHash:     Hash{1, 2, 3, 4, 5},
 	Number:         42,
@@ -39,11 +38,11 @@ var exampleHeader = Header{
 		{IsSeal: true, AsSeal: Seal{ConsensusEngineID: 11, Bytes: Bytes{12, 13, 14}}},
 		{IsPreRuntime: true, AsPreRuntime: PreRuntime{ConsensusEngineID: 13, Bytes: Bytes{14, 15, 16}}},
 	},
-	Extension: HeaderExtension{
+	Extension: HeaderExtensionEnum{
 		V1: V1HeaderExtension{
 			Commitment: KateCommitment{
-				Rows:       *Value(NewUCompactFromUInt(4)),
-				Cols:       *Value(NewUCompactFromUInt(1)),
+				Rows:       (NewUCompactFromUInt(4)),
+				Cols:       (NewUCompactFromUInt(1)),
 				DataRoot:   Hash{8, 9, 10, 11, 12},
 				Commitment: []U8{1, 2, 3, 4},
 			},
@@ -51,8 +50,8 @@ var exampleHeader = Header{
 				Size: NewUCompactFromUInt(1),
 				Index: []DataLookupIndexItem{
 					{
-						AppId: AppId(NewUCompactFromUInt(1)),
-						Start: Value(NewUCompactFromUInt(0)),
+						AppId: (NewUCompactFromUInt(1)),
+						Start: (NewUCompactFromUInt(0)),
 					},
 				},
 			},
@@ -72,7 +71,7 @@ var exampleHeader = Header{
 // }
 
 func TestHeader_EncodedLength(t *testing.T) {
-	AssertEncodedLength(t, []EncodedLengthAssert{{Input: exampleHeader, Expected: 272}})
+	AssertEncodedLength(t, []EncodedLengthAssert{{Input: exampleHeader, Expected: 205}})
 }
 
 func TestHeader_Encode(t *testing.T) {
@@ -88,7 +87,7 @@ func TestHeader_Encode(t *testing.T) {
 
 func TestHeader_Hex(t *testing.T) {
 	AssertEncodeToHex(t, []EncodeToHexAssert{
-		{Input: exampleHeader, Expected: "0x0102030405000000000000000000000000000000000000000000000000000000a802030405060000000000000000000000000000000000000000000000000000000304050607000000000000000000000000000000000000000000000000000000140008040502060700000000000000000000000000000000000000000000000000000000000004090000000c0a0b0c050b0000000c0c0d0e060d0000000c0e0f10100408090a0b0c00000000000000000000000000000000000000000000000000000010010203040100000004000000000100000014010203040520080d0e0f1011000000000000000000000000000000000000000000000000000000100506070801000000040000000001000000"}, //nolint:lll
+		{Input: exampleHeader, Expected: "0x0102030405000000000000000000000000000000000000000000000000000000a802030405060000000000000000000000000000000000000000000000000000000304050607000000000000000000000000000000000000000000000000000000140008040502060700000000000000000000000000000000000000000000000000000000000004090000000c0a0b0c050b0000000c0c0d0e060d0000000c0e0f10100408090a0b0c000000000000000000000000000000000000000000000000000000100102030404040400"}, //nolint:lll
 	})
 }
 

@@ -35,22 +35,17 @@ func Example_simpleConnect() {
 		panic(err)
 	}
 
-	chain, err := api.RPC.System.Chain()
-	if err != nil {
-		panic(err)
-	}
+	// chain, err := api.RPC.System.Chain()
+	// if err != nil {
+	// 	panic(err)
+	// }
 	nodeName, err := api.RPC.System.Name()
 	if err != nil {
 		panic(err)
 	}
 
-<<<<<<< HEAD
-	fmt.Printf("You are connected to chain %v using %v \n", chain, nodeName)
-	// Output: You are connected to chain Avail Local Solo using Avail Node
-=======
-	fmt.Printf("You are connected to chain %v using %v v%v\n", chain, nodeName, nodeVersion)
-	// Output: You are connected to chain Avail Local Solo using Avail Node v1.6.1-ee9dcadb702
->>>>>>> 9b69d54 (fix: appID type and bump subkey version)
+	fmt.Printf("You are connected to %v \n", nodeName)
+	// Output: You are connected to Avail Node
 }
 
 func Example_listenToNewBlocks() {

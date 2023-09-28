@@ -7,16 +7,18 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/centrifuge/go-substrate-rpc-client)](https://goreportcard.com/report/github.com/centrifuge/go-substrate-rpc-client)
 
 Substrate RPC client in Go. It provides APIs and types around Polkadot and any Substrate-based chain RPC calls.
-This client is modelled after [polkadot-js/api](https://github.com/polkadot-js/api).
+This client is modeled after [polkadot-js/api](https://github.com/polkadot-js/api).
 
 ## State
 
-This package is feature complete, but it is relatively new and might still contain bugs. We advice to use it with caution in production. It comes without any warranties, please refer to LICENCE for details.
+This package is feature complete, but it is relatively new and might still contain bugs. We advise to use it with caution in production. It comes without any warranties, please refer to LICENCE for details.
 
 ## Documentation & Usage Examples
 
 Please refer to https://godoc.org/github.com/centrifuge/go-substrate-rpc-client
 
+### Usage test examples of Dynamic Parsing of events & extrinsics
+[Registry docs](registry/REGISTRY.md)
 ## Contributing
 
 1. Install dependencies by running `make`

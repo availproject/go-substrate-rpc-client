@@ -25,9 +25,13 @@ import (
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"
 )
 
+type DataLookupIndexItem struct {
+	AppId UCompact `json:"app_id"`
+	Start UCompact `json:"start"`
+}
 type DataLookup struct {
-	Size  U32      `json:"size"`
-	Index [][2]U32 `json:"index"`
+	Size  UCompact              `json:"size"`
+	Index []DataLookupIndexItem `json:"index"`
 }
 
 type KateCommitment struct {
@@ -36,37 +40,45 @@ type KateCommitment struct {
 	DataRoot   Hash     `json:"dataRoot"`
 	Commitment []U8     `json:"commitment"`
 }
+type KateCommitmentV2 struct {
+	Rows       UCompact `json:"rows"`
+	Cols       UCompact `json:"cols"`
+	DataRoot   Hash     `json:"dataRoot"`
+	Commitment []U8     `json:"commitment"`
+}
 
 type V1HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"appLookup"`
+	AppLookup  DataLookup     `json:"app_lookup"`
+}
+type V2HeaderExtension struct {
+	Commitment KateCommitment `json:"commitment"`
+	AppLookup  DataLookup     `json:"app_lookup"`
 }
 type VTHeaderExtension struct {
 	NewField   []U8           `json:"newField"`
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"appLookup"`
+	AppLookup  DataLookup     `json:"app_lookup"`
 }
+
 type HeaderExtensionEnum struct {
-	V1    V1HeaderExtension `json:"V1"`
-	VTest VTHeaderExtension `json:"VTest"`
+	V1 V1HeaderExtension `json:"V1"`
 }
 
 type HeaderExtension struct {
-	Enum HeaderExtensionEnum `json:"HeaderExtension"`
+	V1 V1HeaderExtension `json:"HeaderExtension"`
 }
 
 type Header struct {
-	ParentHash     Hash            `json:"parentHash"`
-	Number         BlockNumber     `json:"number"`
-	StateRoot      Hash            `json:"stateRoot"`
-	ExtrinsicsRoot Hash            `json:"extrinsicsRoot"`
-	Digest         Digest          `json:"digest"`
-	Extension      HeaderExtension `json:"extension"`
+	ParentHash     Hash                `json:"parentHash"`
+	Number         BlockNumber         `json:"number"`
+	StateRoot      Hash                `json:"stateRoot"`
+	ExtrinsicsRoot Hash                `json:"extrinsicsRoot"`
+	Digest         Digest              `json:"digest"`
+	Extension      HeaderExtensionEnum `json:"extension"`
 }
 
 type BlockNumber U32
-
-type AppId UCompact
 
 // UnmarshalJSON fills BlockNumber with the JSON encoded byte array given by bz
 func (b *BlockNumber) UnmarshalJSON(bz []byte) error {
@@ -103,12 +115,34 @@ func (b *BlockNumber) Decode(decoder scale.Decoder) error {
 	return err
 }
 
-func (a AppId) Decode(decoder scale.Decoder) error {
-	u := UCompact(a)
-	return u.Decode(decoder)
+func (m HeaderExtensionEnum) Encode(encoder scale.Encoder) error {
+	var err, err1 error
+
+	err = encoder.PushByte(0)
+
+	if err != nil {
+		return err
+	}
+	err1 = encoder.Encode(m.V1)
+	if err1 != nil {
+		return err1
+	}
+	return nil
 }
 
-func (a AppId) Encode(encoder scale.Encoder) error {
-	u := UCompact(a)
-	return u.Encode(encoder)
+func (m *HeaderExtensionEnum) Decode(decoder scale.Decoder) error {
+	b, err := decoder.ReadOneByte()
+
+	if err != nil {
+		return err
+	}
+
+	if b == 0 {
+		err = decoder.Decode(&m.V1)
+	}
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

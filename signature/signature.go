@@ -46,12 +46,9 @@ func KeyringPairFromSecret(seedOrPhrase string, network uint16) (KeyringPair, er
 	}
 
 	ss58Address := kyr.SS58Address(network)
-<<<<<<< HEAD
-=======
 	// if err != nil {
 	// 	return KeyringPair{}, err
 	// }
->>>>>>> 9b69d54 (fix: appID type and bump subkey version)
 
 	var pk = kyr.Public()
 

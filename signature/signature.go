@@ -46,9 +46,6 @@ func KeyringPairFromSecret(seedOrPhrase string, network uint16) (KeyringPair, er
 	}
 
 	ss58Address := kyr.SS58Address(network)
-	// if err != nil {
-	// 	return KeyringPair{}, err
-	// }
 
 	var pk = kyr.Public()
 

@@ -35,10 +35,6 @@ func Example_simpleConnect() {
 		panic(err)
 	}
 
-	// chain, err := api.RPC.System.Chain()
-	// if err != nil {
-	// 	panic(err)
-	// }
 	nodeName, err := api.RPC.System.Name()
 	if err != nil {
 		panic(err)

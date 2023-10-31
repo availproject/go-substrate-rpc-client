@@ -26,7 +26,7 @@ import (
 )
 
 type DataLookupIndexItem struct {
-	AppId UCompact `json:"app_id"`
+	AppId UCompact `json:"appId"`
 	Start UCompact `json:"start"`
 }
 type DataLookup struct {
@@ -37,23 +37,12 @@ type DataLookup struct {
 type KateCommitment struct {
 	Rows       UCompact `json:"rows"`
 	Cols       UCompact `json:"cols"`
-	DataRoot   Hash     `json:"dataRoot"`
 	Commitment []U8     `json:"commitment"`
-}
-type KateCommitmentV2 struct {
-	Rows       UCompact `json:"rows"`
-	Cols       UCompact `json:"cols"`
 	DataRoot   Hash     `json:"dataRoot"`
-	Commitment []U8     `json:"commitment"`
 }
-
 type V1HeaderExtension struct {
+	AppLookup  DataLookup     `json:"appLookup"`
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"app_lookup"`
-}
-type V2HeaderExtension struct {
-	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"app_lookup"`
 }
 type VTHeaderExtension struct {
 	NewField   []U8           `json:"newField"`
@@ -63,10 +52,6 @@ type VTHeaderExtension struct {
 
 type HeaderExtensionEnum struct {
 	V1 V1HeaderExtension `json:"V1"`
-}
-
-type HeaderExtension struct {
-	V1 V1HeaderExtension `json:"HeaderExtension"`
 }
 
 type Header struct {
@@ -137,7 +122,7 @@ func (m *HeaderExtensionEnum) Decode(decoder scale.Decoder) error {
 		return err
 	}
 
-	if b == 0 {
+	if b == 1 {
 		err = decoder.Decode(&m.V1)
 	}
 	if err != nil {

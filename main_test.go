@@ -35,17 +35,13 @@ func Example_simpleConnect() {
 		panic(err)
 	}
 
-	chain, err := api.RPC.System.Chain()
-	if err != nil {
-		panic(err)
-	}
 	nodeName, err := api.RPC.System.Name()
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("You are connected to chain %v using %v \n", chain, nodeName)
-	// Output: You are connected to chain Avail Local Solo using Avail Node
+	fmt.Printf("You are connected to %v \n", nodeName)
+	// Output: You are connected to Avail Node
 }
 
 func Example_listenToNewBlocks() {

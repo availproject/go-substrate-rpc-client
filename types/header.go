@@ -26,7 +26,7 @@ import (
 )
 
 type DataLookupIndexItem struct {
-	AppId UCompact `json:"app_id"`
+	AppId UCompact `json:"appId"`
 	Start UCompact `json:"start"`
 }
 type DataLookup struct {
@@ -49,11 +49,11 @@ type KateCommitmentV2 struct {
 
 type V1HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"app_lookup"`
+	AppLookup  DataLookup     `json:"appLookup"`
 }
 type V2HeaderExtension struct {
 	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"app_lookup"`
+	AppLookup  DataLookup     `json:"appLookup"`
 }
 type VTHeaderExtension struct {
 	NewField   []U8           `json:"newField"`

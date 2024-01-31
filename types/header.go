@@ -18,6 +18,8 @@ package types
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"math/big"
 	"strconv"
 	"strings"
@@ -40,7 +42,13 @@ type KateCommitment struct {
 	Commitment []U8     `json:"commitment"`
 	DataRoot   Hash     `json:"dataRoot"`
 }
+
 type V1HeaderExtension struct {
+	AppLookup  DataLookup     `json:"appLookup"`
+	Commitment KateCommitment `json:"commitment"`
+}
+
+type V2HeaderExtension struct {
 	AppLookup  DataLookup     `json:"appLookup"`
 	Commitment KateCommitment `json:"commitment"`
 }
@@ -50,8 +58,18 @@ type VTHeaderExtension struct {
 	AppLookup  DataLookup     `json:"app_lookup"`
 }
 
+type ExtensionType int
+
+const (
+	ExtensionTypeNone ExtensionType = iota
+	ExtensionTypeV1
+	ExtensionTypeV2
+)
+
 type HeaderExtensionEnum struct {
-	V1 V1HeaderExtension `json:"V1"`
+	Type ExtensionType
+	V1   V1HeaderExtension
+	V2   V2HeaderExtension
 }
 
 type Header struct {
@@ -101,33 +119,46 @@ func (b *BlockNumber) Decode(decoder scale.Decoder) error {
 }
 
 func (m HeaderExtensionEnum) Encode(encoder scale.Encoder) error {
-	var err, err1 error
+	var err error
 
-	err = encoder.PushByte(0)
+	switch m.Type {
+	case 1:
+		err = encoder.PushByte(0) // Byte 0 for V1
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(m.V1)
 
-	if err != nil {
-		return err
+	case 2:
+		err = encoder.PushByte(1) // Byte 1 for V2
+		if err != nil {
+			return err
+		}
+		err = encoder.Encode(m.V2)
+
+	default:
+		return errors.New("invalid or unpopulated HeaderExtensionEnum type")
 	}
-	err1 = encoder.Encode(m.V1)
-	if err1 != nil {
-		return err1
-	}
-	return nil
+
+	return err
 }
 
 func (m *HeaderExtensionEnum) Decode(decoder scale.Decoder) error {
 	b, err := decoder.ReadOneByte()
-
 	if err != nil {
 		return err
 	}
 
-	if b == 1 {
+	switch b {
+	case 0:
+		m.Type = ExtensionTypeV1
 		err = decoder.Decode(&m.V1)
-	}
-	if err != nil {
-		return err
+	case 1:
+		m.Type = ExtensionTypeV2
+		err = decoder.Decode(&m.V2)
+	default:
+		return fmt.Errorf("unknown HeaderExtensionEnum variant: %d", b)
 	}
 
-	return nil
+	return err
 }

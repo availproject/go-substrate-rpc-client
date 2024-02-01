@@ -56,18 +56,16 @@ type VTHeaderExtension struct {
 	AppLookup  DataLookup     `json:"app_lookup"`
 }
 
-type ExtensionType int
+// type ExtensionType int
 
-const (
-	ExtensionTypeNone ExtensionType = iota
-	ExtensionTypeV1
-	ExtensionTypeV2
-)
+// const (
+// 	ExtensionTypeNone ExtensionType = iota
+// 	ExtensionTypeV1
+// 	ExtensionTypeV2
+// )
 
 type HeaderExtensionEnum struct {
-	Type ExtensionType
-	V1   V1HeaderExtension
-	V2   V2HeaderExtension
+	V2 V2HeaderExtension
 }
 
 type Header struct {

@@ -65,7 +65,7 @@ type VTHeaderExtension struct {
 // )
 
 type HeaderExtensionEnum struct {
-	V2 V2HeaderExtension
+	V2 V2HeaderExtension `json:"V2"`
 }
 
 type Header struct {

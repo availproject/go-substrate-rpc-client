@@ -40,7 +40,13 @@ type KateCommitment struct {
 	Commitment []U8     `json:"commitment"`
 	DataRoot   Hash     `json:"dataRoot"`
 }
+
 type V1HeaderExtension struct {
+	AppLookup  DataLookup     `json:"appLookup"`
+	Commitment KateCommitment `json:"commitment"`
+}
+
+type V2HeaderExtension struct {
 	AppLookup  DataLookup     `json:"appLookup"`
 	Commitment KateCommitment `json:"commitment"`
 }
@@ -50,8 +56,16 @@ type VTHeaderExtension struct {
 	AppLookup  DataLookup     `json:"app_lookup"`
 }
 
+// type ExtensionType int
+
+// const (
+// 	ExtensionTypeNone ExtensionType = iota
+// 	ExtensionTypeV1
+// 	ExtensionTypeV2
+// )
+
 type HeaderExtensionEnum struct {
-	V1 V1HeaderExtension `json:"V1"`
+	V2 V2HeaderExtension `json:"V2"`
 }
 
 type Header struct {
@@ -103,12 +117,12 @@ func (b *BlockNumber) Decode(decoder scale.Decoder) error {
 func (m HeaderExtensionEnum) Encode(encoder scale.Encoder) error {
 	var err, err1 error
 
-	err = encoder.PushByte(0)
+	err = encoder.PushByte(1)
 
 	if err != nil {
 		return err
 	}
-	err1 = encoder.Encode(m.V1)
+	err1 = encoder.Encode(m.V2)
 	if err1 != nil {
 		return err1
 	}
@@ -123,7 +137,7 @@ func (m *HeaderExtensionEnum) Decode(decoder scale.Decoder) error {
 	}
 
 	if b == 1 {
-		err = decoder.Decode(&m.V1)
+		err = decoder.Decode(&m.V2)
 	}
 	if err != nil {
 		return err

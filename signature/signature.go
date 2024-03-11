@@ -23,7 +23,7 @@ import (
 	"strconv"
 
 	"github.com/vedhavyas/go-subkey/v2"
-	"github.com/vedhavyas/go-subkey/v2/sr25519"
+	"github.com/vedhavyas/go-subkey/v2/ed25519"
 	"golang.org/x/crypto/blake2b"
 )
 
@@ -39,7 +39,7 @@ type KeyringPair struct {
 // KeyringPairFromSecret creates KeyPair based on seed/phrase and network
 // Leave network empty for default behavior
 func KeyringPairFromSecret(seedOrPhrase string, network uint16) (KeyringPair, error) {
-	scheme := sr25519.Scheme{}
+	scheme := ed25519.Scheme{}
 	kyr, err := subkey.DeriveKeyPair(scheme, seedOrPhrase)
 	if err != nil {
 		return KeyringPair{}, err
@@ -71,7 +71,7 @@ func Sign(data []byte, privateKeyURI string) ([]byte, error) {
 		data = h[:]
 	}
 
-	scheme := sr25519.Scheme{}
+	scheme := ed25519.Scheme{}
 	kyr, err := subkey.DeriveKeyPair(scheme, privateKeyURI)
 	if err != nil {
 		return nil, err
@@ -94,7 +94,7 @@ func Verify(data []byte, sig []byte, privateKeyURI string) (bool, error) {
 		data = h[:]
 	}
 
-	scheme := sr25519.Scheme{}
+	scheme := ed25519.Scheme{}
 	kyr, err := subkey.DeriveKeyPair(scheme, privateKeyURI)
 	if err != nil {
 		return false, err

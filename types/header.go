@@ -41,19 +41,9 @@ type KateCommitment struct {
 	DataRoot   Hash     `json:"dataRoot"`
 }
 
-type V1HeaderExtension struct {
+type V3HeaderExtension struct {
 	AppLookup  DataLookup     `json:"appLookup"`
 	Commitment KateCommitment `json:"commitment"`
-}
-
-type V2HeaderExtension struct {
-	AppLookup  DataLookup     `json:"appLookup"`
-	Commitment KateCommitment `json:"commitment"`
-}
-type VTHeaderExtension struct {
-	NewField   []U8           `json:"newField"`
-	Commitment KateCommitment `json:"commitment"`
-	AppLookup  DataLookup     `json:"app_lookup"`
 }
 
 // type ExtensionType int
@@ -65,7 +55,7 @@ type VTHeaderExtension struct {
 // )
 
 type HeaderExtensionEnum struct {
-	V2 V2HeaderExtension `json:"V2"`
+	V3 V3HeaderExtension `json:"V3"`
 }
 
 type Header struct {
@@ -117,12 +107,12 @@ func (b *BlockNumber) Decode(decoder scale.Decoder) error {
 func (m HeaderExtensionEnum) Encode(encoder scale.Encoder) error {
 	var err, err1 error
 
-	err = encoder.PushByte(1)
+	err = encoder.PushByte(2)
 
 	if err != nil {
 		return err
 	}
-	err1 = encoder.Encode(m.V2)
+	err1 = encoder.Encode(m.V3)
 	if err1 != nil {
 		return err1
 	}
@@ -136,8 +126,8 @@ func (m *HeaderExtensionEnum) Decode(decoder scale.Decoder) error {
 		return err
 	}
 
-	if b == 1 {
-		err = decoder.Decode(&m.V2)
+	if b == 2 {
+		err = decoder.Decode(&m.V3)
 	}
 	if err != nil {
 		return err

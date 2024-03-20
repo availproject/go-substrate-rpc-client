@@ -46,7 +46,7 @@ func TestAuthor_SubmitAndWatchExtrinsic(t *testing.T) {
 	bob, err := types.NewMultiAddressFromHexAccountID("0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48")
 	assert.NoError(t, err)
 
-	c, err := types.NewCall(meta, "Balances.transfer", bob, types.NewUCompactFromUInt(6969))
+	c, err := types.NewCall(meta, "Balances.transfer_keep_alive", bob, types.NewUCompactFromUInt(6969))
 	assert.NoError(t, err)
 
 	ext := types.NewExtrinsic(c)

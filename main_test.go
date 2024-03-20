@@ -200,7 +200,7 @@ func Example_makeASimpleTransfer() {
 		panic(fmt.Errorf("failed to convert balance"))
 	}
 
-	c, err := types.NewCall(meta, "Balances.transfer", bob, types.NewUCompact(bal))
+	c, err := types.NewCall(meta, "Balances.transfer_keep_alive", bob, types.NewUCompact(bal))
 	if err != nil {
 		panic(err)
 	}

@@ -142,36 +142,36 @@ type EventRecords struct {
 	Council_Proposed       []EventCouncilProposed       `test-gen-blockchain:"centrifuge-parachain"`
 	Council_Voted          []EventCouncilVoted          `test-gen-blockchain:"centrifuge-parachain"`
 
-	Crowdloan_Created           []EventCrowdloanCreated           `test-gen-blockchain:"polkadot"`
-	Crowdloan_Contributed       []EventCrowdloanContributed       `test-gen-blockchain:"polkadot"`
-	Crowdloan_Withdrew          []EventCrowdloanWithdrew          `test-gen-blockchain:"polkadot"`
-	Crowdloan_PartiallyRefunded []EventCrowdloanPartiallyRefunded `test-gen-blockchain:"polkadot"`
-	Crowdloan_AllRefunded       []EventCrowdloanAllRefunded       `test-gen-blockchain:"polkadot"`
-	Crowdloan_Dissolved         []EventCrowdloanDissolved         `test-gen-blockchain:"polkadot"`
-	Crowdloan_HandleBidResult   []EventCrowdloanHandleBidResult   `test-gen-blockchain:"polkadot"`
-	Crowdloan_Edited            []EventCrowdloanEdited            `test-gen-blockchain:"polkadot"`
-	Crowdloan_MemoUpdated       []EventCrowdloanMemoUpdated       `test-gen-blockchain:"polkadot"`
-	Crowdloan_AddedToNewRaise   []EventCrowdloanAddedToNewRaise   `test-gen-blockchain:"polkadot"`
-
-	Democracy_Blacklisted     []EventDemocracyBlacklisted     `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Cancelled       []EventDemocracyCancelled       `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Delegated       []EventDemocracyDelegated       `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Executed        []EventDemocracyExecuted        `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_ExternalTabled  []EventDemocracyExternalTabled  `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_NotPassed       []EventDemocracyNotPassed       `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Passed          []EventDemocracyPassed          `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_PreimageInvalid []EventDemocracyPreimageInvalid `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_PreimageMissing []EventDemocracyPreimageMissing `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_PreimageNoted   []EventDemocracyPreimageNoted   `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_PreimageReaped  []EventDemocracyPreimageReaped  `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_PreimageUsed    []EventDemocracyPreimageUsed    `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Proposed        []EventDemocracyProposed        `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Seconded        []EventDemocracySeconded        `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Started         []EventDemocracyStarted         `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Tabled          []EventDemocracyTabled          `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Undelegated     []EventDemocracyUndelegated     `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Vetoed          []EventDemocracyVetoed          `test-gen-blockchain:"centrifuge-parachain"`
-	Democracy_Voted           []EventDemocracyVoted           `test-gen-blockchain:"centrifuge-parachain"`
+	Crowdloan_Created              []EventCrowdloanCreated              `test-gen-blockchain:"polkadot"`
+	Crowdloan_Contributed          []EventCrowdloanContributed          `test-gen-blockchain:"polkadot"`
+	Crowdloan_Withdrew             []EventCrowdloanWithdrew             `test-gen-blockchain:"polkadot"`
+	Crowdloan_PartiallyRefunded    []EventCrowdloanPartiallyRefunded    `test-gen-blockchain:"polkadot"`
+	Crowdloan_AllRefunded          []EventCrowdloanAllRefunded          `test-gen-blockchain:"polkadot"`
+	Crowdloan_Dissolved            []EventCrowdloanDissolved            `test-gen-blockchain:"polkadot"`
+	Crowdloan_HandleBidResult      []EventCrowdloanHandleBidResult      `test-gen-blockchain:"polkadot"`
+	Crowdloan_Edited               []EventCrowdloanEdited               `test-gen-blockchain:"polkadot"`
+	Crowdloan_MemoUpdated          []EventCrowdloanMemoUpdated          `test-gen-blockchain:"polkadot"`
+	Crowdloan_AddedToNewRaise      []EventCrowdloanAddedToNewRaise      `test-gen-blockchain:"polkadot"`
+	DataAvailability_DataSubmitted []EventDataAvailabilityDataSubmitted `test-gen-skip:"true"`
+	Democracy_Blacklisted          []EventDemocracyBlacklisted          `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Cancelled            []EventDemocracyCancelled            `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Delegated            []EventDemocracyDelegated            `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Executed             []EventDemocracyExecuted             `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_ExternalTabled       []EventDemocracyExternalTabled       `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_NotPassed            []EventDemocracyNotPassed            `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Passed               []EventDemocracyPassed               `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_PreimageInvalid      []EventDemocracyPreimageInvalid      `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_PreimageMissing      []EventDemocracyPreimageMissing      `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_PreimageNoted        []EventDemocracyPreimageNoted        `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_PreimageReaped       []EventDemocracyPreimageReaped       `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_PreimageUsed         []EventDemocracyPreimageUsed         `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Proposed             []EventDemocracyProposed             `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Seconded             []EventDemocracySeconded             `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Started              []EventDemocracyStarted              `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Tabled               []EventDemocracyTabled               `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Undelegated          []EventDemocracyUndelegated          `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Vetoed               []EventDemocracyVetoed               `test-gen-blockchain:"centrifuge-parachain"`
+	Democracy_Voted                []EventDemocracyVoted                `test-gen-blockchain:"centrifuge-parachain"`
 
 	ElectionProviderMultiPhase_SolutionStored       []EventElectionProviderMultiPhaseSolutionStored       `test-gen-blockchain:"polkadot"`
 	ElectionProviderMultiPhase_ElectionFinalized    []EventElectionProviderMultiPhaseElectionFinalized    `test-gen-blockchain:"polkadot"`

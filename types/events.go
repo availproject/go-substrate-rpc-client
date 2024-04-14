@@ -1612,6 +1612,56 @@ type EventDataAvailabilityDataSubmitted struct {
 	Topics   []Hash
 }
 
+type EventVectorMessageSubmitted struct {
+	Phase             Phase
+	From              AccountID
+	To                Hash
+	MessageType       MessageType
+	DestinationDomain U32
+	MessageID         U64
+	Topics            []Hash
+}
+
+type MessageType int8
+
+const (
+	// ArbitraryMessage corresponds to Rust's ArbitraryMessage variant.
+	ArbitraryMessage MessageType = iota
+	// FungibleToken corresponds to Rust's FungibleToken variant.
+	FungibleToken
+)
+
+type EventHeadUpdated struct {
+	Phase              Phase
+	Slot               U64
+	FinalizationRoot   Hash
+	ExecutionStateRoot Hash
+	Topics             []Hash
+}
+type EventDataAvailability_ApplicationKeyCreated struct {
+	Phase  Phase
+	Key    []U8
+	Owner  AccountID
+	Id     UCompact
+	Topics []Hash
+}
+
+type EventSyncCommitteeUpdated struct {
+	Phase  Phase
+	Period U64
+	Root   Hash
+	Topics []Hash
+}
+
+type EventMessageSubmitted struct {
+	Phase       Phase
+	From        Hash
+	To          Hash
+	MessageId   U64
+	MessageRoot Hash
+	Topics      []Hash
+}
+
 // EventCouncilProposed is emitted when a motion (given hash) has been proposed (by given account)
 // with a threshold (given `MemberCount`).
 type EventCouncilProposed struct {

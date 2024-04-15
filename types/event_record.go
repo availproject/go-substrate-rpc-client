@@ -155,7 +155,7 @@ type EventRecords struct {
 	DataAvailability_DataSubmitted         []EventDataAvailabilityDataSubmitted          `test-gen-skip:"true"`
 	DataAvailability_ApplicationKeyCreated []EventDataAvailability_ApplicationKeyCreated `test-gen-skip:"true"`
 	Vector_MessageSubmitted                []EventVectorMessageSubmitted                 `test-gen-skip:"true"`
-	Vector_HeaderUpdated                   []EventHeadUpdated                            `test-gen-skip:"true"`
+	Vector_HeadUpdated                     []EventHeadUpdated                            `test-gen-skip:"true"`
 	Vector_SyncCommitteeUpdated            []EventSyncCommitteeUpdated                   `test-gen-skip:"true"`
 	Democracy_Blacklisted                  []EventDemocracyBlacklisted                   `test-gen-blockchain:"centrifuge-parachain"`
 	Democracy_Cancelled                    []EventDemocracyCancelled                     `test-gen-blockchain:"centrifuge-parachain"`

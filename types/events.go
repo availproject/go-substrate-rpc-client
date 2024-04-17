@@ -117,6 +117,76 @@ type EventBalancesSlashed struct {
 	Balance U128
 	Topics  []Hash
 }
+type EventBalancesMinted struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesBurned struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesSuspended struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesRestored struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesUpgraded struct {
+	Phase   Phase
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesIssued struct {
+	Phase   Phase
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesRescinded struct {
+	Phase   Phase
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesLocked struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+
+type EventBalancesUnLocked struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesFrozen struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesThawed struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesTotalIssuanceForced struct {
+	Phase  Phase
+	Old    AccountID
+	New    U128
+	Topics []Hash
+}
 
 // EventGrandpaNewAuthorities is emitted when a new authority set has been applied
 type EventGrandpaNewAuthorities struct {
@@ -3338,10 +3408,10 @@ type EventContractsContractExecution struct {
 // EventUtilityBatchInterrupted is emitted when a batch of dispatches did not complete fully.
 // Index of first failing dispatch given, as well as the error.
 type EventUtilityBatchInterrupted struct {
-	Phase         Phase
-	Index         U32
-	DispatchError DispatchError
-	Topics        []Hash
+	Phase  Phase
+	Index  U32
+	Error  DispatchError
+	Topics []Hash
 }
 
 // EventUtilityBatchCompleted is emitted when a batch of dispatches completed fully with no error.
@@ -3353,8 +3423,18 @@ type EventUtilityBatchCompleted struct {
 // EventUtilityDispatchedAs is emitted when a call was dispatched
 type EventUtilityDispatchedAs struct {
 	Phase  Phase
-	Index  U32
 	Result DispatchResult
+	Topics []Hash
+}
+
+type EventUtilityBatchCompletedWithErrors struct {
+	Phase  Phase
+	Topics []Hash
+}
+
+type EventUtilityItemFailed struct {
+	Phase  Phase
+	Error  DispatchError
 	Topics []Hash
 }
 

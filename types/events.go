@@ -117,6 +117,76 @@ type EventBalancesSlashed struct {
 	Balance U128
 	Topics  []Hash
 }
+type EventBalancesMinted struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesBurned struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesSuspended struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesRestored struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesUpgraded struct {
+	Phase   Phase
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesIssued struct {
+	Phase   Phase
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesRescinded struct {
+	Phase   Phase
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesLocked struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+
+type EventBalancesUnLocked struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesFrozen struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesThawed struct {
+	Phase   Phase
+	Who     AccountID
+	Balance U128
+	Topics  []Hash
+}
+type EventBalancesTotalIssuanceForced struct {
+	Phase  Phase
+	Old    AccountID
+	New    U128
+	Topics []Hash
+}
 
 // EventGrandpaNewAuthorities is emitted when a new authority set has been applied
 type EventGrandpaNewAuthorities struct {
@@ -1601,6 +1671,65 @@ type EventDemocracyBlacklisted struct {
 	Phase  Phase
 	Hash   Hash
 	Topics []Hash
+}
+
+type EventApplicationCreated struct {
+}
+type EventDataAvailabilityDataSubmitted struct {
+	Phase    Phase
+	Who      AccountID
+	DataHash Hash
+	Topics   []Hash
+}
+
+type EventVectorMessageSubmitted struct {
+	Phase             Phase
+	From              AccountID
+	To                Hash
+	MessageType       MessageType
+	DestinationDomain U32
+	MessageID         U64
+	Topics            []Hash
+}
+
+type MessageType int8
+
+const (
+	// ArbitraryMessage corresponds to Rust's ArbitraryMessage variant.
+	ArbitraryMessage MessageType = iota
+	// FungibleToken corresponds to Rust's FungibleToken variant.
+	FungibleToken
+)
+
+type EventHeadUpdated struct {
+	Phase              Phase
+	Slot               U64
+	FinalizationRoot   Hash
+	ExecutionStateRoot Hash
+	Topics             []Hash
+}
+type EventDataAvailability_ApplicationKeyCreated struct {
+	Phase  Phase
+	Key    []U8
+	Owner  AccountID
+	Id     UCompact
+	Topics []Hash
+}
+
+type EventSyncCommitteeUpdated struct {
+	Phase  Phase
+	Period U64
+	Root   Hash
+	Topics []Hash
+}
+
+type EventMessageSubmitted struct {
+	Phase       Phase
+	From        Hash
+	To          Hash
+	MessageId   U64
+	MessageRoot Hash
+	Topics      []Hash
 }
 
 // EventCouncilProposed is emitted when a motion (given hash) has been proposed (by given account)
@@ -3279,10 +3408,10 @@ type EventContractsContractExecution struct {
 // EventUtilityBatchInterrupted is emitted when a batch of dispatches did not complete fully.
 // Index of first failing dispatch given, as well as the error.
 type EventUtilityBatchInterrupted struct {
-	Phase         Phase
-	Index         U32
-	DispatchError DispatchError
-	Topics        []Hash
+	Phase  Phase
+	Index  U32
+	Error  DispatchError
+	Topics []Hash
 }
 
 // EventUtilityBatchCompleted is emitted when a batch of dispatches completed fully with no error.
@@ -3294,8 +3423,18 @@ type EventUtilityBatchCompleted struct {
 // EventUtilityDispatchedAs is emitted when a call was dispatched
 type EventUtilityDispatchedAs struct {
 	Phase  Phase
-	Index  U32
 	Result DispatchResult
+	Topics []Hash
+}
+
+type EventUtilityBatchCompletedWithErrors struct {
+	Phase  Phase
+	Topics []Hash
+}
+
+type EventUtilityItemFailed struct {
+	Phase  Phase
+	Error  DispatchError
 	Topics []Hash
 }
 

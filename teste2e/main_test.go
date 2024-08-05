@@ -62,7 +62,6 @@ func TestEnd2end(t *testing.T) {
 	fmt.Printf("Latest block: %v\n", hash.Hex())
 	fmt.Printf("\tView in Polkadot/Substrate Apps: https://polkadot.js.org/apps/#/explorer/query/%v?"+
 		"rpc=wss://serinus-5.kusama.network\n", hash.Hex())
-	fmt.Printf("\tView in polkascan.io: https://polkascan.io/pre/kusama-cc2/block/%v\n", hash.Hex())
 	fmt.Println()
 
 	header, err := api.RPC.Chain.GetHeader(hash)

@@ -66,10 +66,12 @@ func (pe Encoder) PushByte(b byte) error {
 // A typical usage is storing the length of a collection.
 // Definition of compact encoding:
 // 0b00 00 00 00 / 00 00 00 00 / 00 00 00 00 / 00 00 00 00
-//   xx xx xx 00															(0 ... 2**6 - 1)		(u8)
-//   yL yL yL 01 / yH yH yH yL												(2**6 ... 2**14 - 1)	(u8, u16)  low LH high
-//   zL zL zL 10 / zM zM zM zL / zM zM zM zM / zH zH zH zM					(2**14 ... 2**30 - 1)	(u16, u32)  low LMMH high
-//   nn nn nn 11 [ / zz zz zz zz ]{4 + n}									(2**30 ... 2**536 - 1)	(u32, u64, u128, U256, U512, U520) straight LE-encoded
+//
+//	xx xx xx 00															(0 ... 2**6 - 1)		(u8)
+//	yL yL yL 01 / yH yH yH yL												(2**6 ... 2**14 - 1)	(u8, u16)  low LH high
+//	zL zL zL 10 / zM zM zM zL / zM zM zM zM / zH zH zH zM					(2**14 ... 2**30 - 1)	(u16, u32)  low LMMH high
+//	nn nn nn 11 [ / zz zz zz zz ]{4 + n}									(2**30 ... 2**536 - 1)	(u32, u64, u128, U256, U512, U520) straight LE-encoded
+//
 // Rust implementation: see impl<'a> Encode for CompactRef<'a, u64>
 func (pe Encoder) EncodeUintCompact(v big.Int) error {
 	if v.Sign() == -1 {
@@ -264,6 +266,29 @@ func (pe Encoder) Encode(value interface{}) error {
 func (pe Encoder) EncodeOption(hasValue bool, value interface{}) error {
 	if !hasValue {
 		err := pe.PushByte(0)
+		if err != nil {
+			return err
+		}
+	} else {
+		err := pe.PushByte(1)
+		if err != nil {
+			return err
+		}
+		err = pe.Encode(value)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (pe Encoder) EncodeCustomOption(hasValue bool, value interface{}) error {
+	if !hasValue {
+		err := pe.PushByte(0)
+		if err != nil {
+			return err
+		}
+		err = pe.Encode(value)
 		if err != nil {
 			return err
 		}
@@ -559,6 +584,27 @@ func (pd Decoder) DecodeOption(hasValue *bool, valuePointer interface{}) error {
 	switch b {
 	case 0:
 		*hasValue = false
+	case 1:
+		*hasValue = true
+		err := pd.Decode(valuePointer)
+		if err != nil {
+			return err
+		}
+	default:
+		return fmt.Errorf("Unknown byte prefix for encoded OptionBool: %d", b)
+	}
+	return nil
+}
+
+func (pd Decoder) DecodeCustomOption(hasValue *bool, valuePointer interface{}) error {
+	b, _ := pd.ReadOneByte()
+	switch b {
+	case 0:
+		*hasValue = false
+		err := pd.Decode(valuePointer)
+		if err != nil {
+			return err
+		}
 	case 1:
 		*hasValue = true
 		err := pd.Decode(valuePointer)

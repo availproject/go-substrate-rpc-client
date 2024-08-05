@@ -242,10 +242,31 @@ type EventRecords struct {
 	Lottery_Winner         []EventLotteryWinner         `test-gen-skip:"true"`
 	Lottery_TicketBought   []EventLotteryTicketBought   `test-gen-skip:"true"`
 
+	Mandate_RootOp []EventMandateRootOp `test-gen-skip:"true"`
+
 	Multisig_MultisigApproval  []EventMultisigApproval    `test-gen-blockchain:"altair"`
 	Multisig_MultisigCancelled []EventMultisigCancelled   `test-gen-blockchain:"altair"`
 	Multisig_MultisigExecuted  []EventMultisigExecuted    `test-gen-blockchain:"altair"`
 	Multisig_NewMultisig       []EventMultisigNewMultisig `test-gen-blockchain:"altair"`
+
+	Nomination_Created       []EventNominationCreated       `test-gen-skip:"true"`
+	Nomination_Bonded        []EventNominationBonded        `test-gen-skip:"true"`
+	Nomination_PaidOut       []EventNominationPaidOut       `test-gen-skip:"true"`
+	Nomination_Unbonded      []EventNominationUnbonded      `test-gen-skip:"true"`
+	Nomination_Withdrawn     []EventNominationWithdrawn     `test-gen-skip:"true"`
+	Nomination_Destroyed     []EventNominationDestroyed     `test-gen-skip:"true"`
+	Nomination_MemberRemoved []EventNominationMemberRemoved `test-gen-skip:"true"`
+	Nomination_RolesUpdated  []EventNominationRolesUpdated  `test-gen-skip:"true"`
+	//StateChanged is not added because of enums,use registry for now TODO:
+	Nomination_PoolSlashed          []EventNominationPoolSlashed          `test-gen-skip:"true"`
+	Nomination_UnbondingPoolSlashed []EventNominationUnbondingPoolSlashed `test-gen-skip:"true"`
+	// Nomination_PoolCommissionUpdated                []EventNominationPoolCommissionUpdated                `test-gen-skip:"true"`
+	// Nomination_PoolMaxCommissionUpdated             []EventNominationPoolMaxCommissionUpdated             `test-gen-skip:"true"`
+	// Nomination_PoolCommissionChangeRateUpdated      []EventNominationPoolCommissionChangeRateUpdated      `test-gen-skip:"true"`
+	// Nomination_PoolCommissionClaimPermissionUpdated []EventNominationPoolCommissionClaimPermissionUpdated `test-gen-skip:"true"`
+	Nomination_PoolCommissionClaimed     []EventNominationPoolCommissionClaimed     `test-gen-skip:"true"`
+	Nomination_MinBalanceDeficitAdjusted []EventNominationMinBalanceDeficitAdjusted `test-gen-skip:"true"`
+	Nomination_MinBalanceExcessAdjusted  []EventNominationMinBalanceExcessAdjusted  `test-gen-skip:"true"`
 
 	NftSales_ForSale []EventNftSalesForSale `test-gen-blockchain:"altair"`
 	NftSales_Removed []EventNftSalesRemoved `test-gen-blockchain:"altair"`
@@ -424,6 +445,9 @@ type EventRecords struct {
 	Treasury_Deposit         []EventTreasuryDeposit         `test-gen-blockchain:"altair"`
 	Treasury_SpendApproved   []EventTreasurySpendApproved   `test-gen-blockchain:"altair"`
 	Treasury_UpdatedInactive []EventTreasuryUpdatedInactive `test-gen-blockchain:"altair"`
+	Treasury_Paid            []EventTreasuryPaid            `test-gen-skip:"true"`
+	Treasury_PaymentFailed   []EventTreasuryPaymentFailed   `test-gen-skip:"true"`
+	Treasury_SpendProcessed  []EventTreasurySpendProcessed  `test-gen-skip:"true"`
 
 	Uniques_ApprovalCancelled    []EventUniquesApprovalCancelled    `test-gen-blockchain:"altair"`
 	Uniques_ApprovedTransfer     []EventUniquesApprovedTransfer     `test-gen-blockchain:"altair"`

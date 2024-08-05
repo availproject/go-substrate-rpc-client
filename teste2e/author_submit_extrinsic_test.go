@@ -70,9 +70,17 @@ func TestChain_SubmitExtrinsic(t *testing.T) {
 
 	c, err := types.NewCall(meta, "Balances.transfer", bob, types.NewUCompactFromUInt(6969))
 	assert.NoError(t, err)
-
+	latestBlock, err := api.RPC.Chain.GetBlockLatest()
+	assert.NoError(t, err)
+	latestHash, err := api.RPC.Chain.GetBlockHashLatest()
+	assert.NoError(t, err)
 	ext := types.NewExtrinsic(c)
-	era := types.ExtrinsicEra{IsMortalEra: false}
+	var e types.ExtrinsicEra
+	e.IsMortalEra = true
+	number := latestBlock.Block.Header.Number
+	second := types.U64(number) % 128
+
+	e.AsMortalEra = types.MortalEra{First: types.U64(128), Second: types.U64(second)}
 
 	genesisHash, err := api.RPC.Chain.GetBlockHash(0)
 	assert.NoError(t, err)
@@ -93,8 +101,8 @@ func TestChain_SubmitExtrinsic(t *testing.T) {
 	for {
 		o := types.SignatureOptions{
 			// BlockHash:   blockHash,
-			BlockHash:          genesisHash, // BlockHash needs to == GenesisHash if era is immortal. // TODO: add an error?
-			Era:                era,
+			BlockHash:          latestHash, // BlockHash needs to == GenesisHash if era is immortal. // TODO: add an error?
+			Era:                e,
 			GenesisHash:        genesisHash,
 			Nonce:              types.NewUCompactFromUInt(uint64(nonce)),
 			SpecVersion:        rv.SpecVersion,

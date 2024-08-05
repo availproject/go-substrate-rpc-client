@@ -38,7 +38,7 @@ func TestExtrinsicEra_Mortal(t *testing.T) {
 	err := DecodeFromHex("0x4e9c", &e)
 	assert.NoError(t, err)
 	assert.Equal(t, ExtrinsicEra{
-		IsMortalEra: true, AsMortalEra: MortalEra{78, 156},
+		IsMortalEra: true, AsMortalEra: MortalEra{32768, 20000},
 	}, e)
 }
 
@@ -52,8 +52,8 @@ var (
 
 			e.IsMortalEra = true
 			e.AsMortalEra = MortalEra{
-				First:  1,
-				Second: 2,
+				First:  32768,
+				Second: 20000,
 			}
 		}),
 	}

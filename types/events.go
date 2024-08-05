@@ -332,6 +332,12 @@ type EventLotteryTicketBought struct {
 	Topics    []Hash
 }
 
+type EventMandateRootOp struct {
+	Phase  Phase
+	Result DispatchResult
+	Topics []Hash
+}
+
 // EventOffencesOffence is emitted when there is an offence reported of the given kind happened at the session_index
 // and (kind-specific) time slot. This event is not deposited for duplicate slashes
 type EventOffencesOffence struct {
@@ -2886,6 +2892,23 @@ type EventTreasuryUpdatedInactive struct {
 	Deactivated U128
 	Topics      []Hash
 }
+type EventTreasuryPaid struct {
+	Phase     Phase
+	Index     U32
+	PaymentId U128
+	Topics    []Hash
+}
+type EventTreasuryPaymentFailed struct {
+	Phase     Phase
+	Index     U32
+	PaymentId U128
+	Topics    []Hash
+}
+type EventTreasurySpendProcessed struct {
+	Phase  Phase
+	Index  U128
+	Topics []Hash
+}
 
 // EventTipsNewTip is emitted when a new tip suggestion has been opened.
 type EventTipsNewTip struct {
@@ -3451,6 +3474,94 @@ type EventMultisigNewMultisig struct {
 	Who, ID  AccountID
 	CallHash Hash
 	Topics   []Hash
+}
+
+type EventNominationCreated struct {
+	Phase     Phase
+	Depositor AccountID
+	PoolId    U32
+	Topics    []Hash
+}
+type EventNominationBonded struct {
+	Phase  Phase
+	Member AccountID
+	PoolId U32
+	Bonded U128
+	Joined Bool
+	Topics []Hash
+}
+type EventNominationPaidOut struct {
+	Phase  Phase
+	Member AccountID
+	PoolId U32
+	Payout U128
+	Topics []Hash
+}
+type EventNominationUnbonded struct {
+	Phase   Phase
+	Member  AccountID
+	PoolId  U32
+	Balance U128
+	Points  U128
+	Era     U32
+	Topics  []Hash
+}
+type EventNominationWithdrawn struct {
+	Phase   Phase
+	Member  AccountID
+	PoolId  U32
+	Balance U128
+	Points  U128
+	Topics  []Hash
+}
+type EventNominationDestroyed struct {
+	Phase  Phase
+	PoolId U32
+	Topics []Hash
+}
+type EventNominationMemberRemoved struct {
+	Phase  Phase
+	PoolId U32
+	Member AccountID
+	Topics []Hash
+}
+type EventNominationRolesUpdated struct {
+	Phase     Phase
+	Root      AccountID
+	Bouncer   AccountID
+	Nominator AccountID
+	Topics    []Hash
+}
+type EventNominationPoolSlashed struct {
+	Phase   Phase
+	PoolId  U32
+	Balance U128
+	Topics  []Hash
+}
+type EventNominationUnbondingPoolSlashed struct {
+	Phase   Phase
+	PoolId  U32
+	Era     U32
+	Balance U128
+	Topics  []Hash
+}
+type EventNominationPoolCommissionClaimed struct {
+	Phase      Phase
+	PoolId     U32
+	Commission U128
+	Topics     []Hash
+}
+type EventNominationMinBalanceDeficitAdjusted struct {
+	Phase  Phase
+	PoolId U32
+	Amount U128
+	Topics []Hash
+}
+type EventNominationMinBalanceExcessAdjusted struct {
+	Phase  Phase
+	PoolId U32
+	Amount U128
+	Topics []Hash
 }
 
 // EventNftSalesForSale is emitted when an NFT is out for sale.

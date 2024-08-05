@@ -445,10 +445,23 @@ func Example_transactionWithEvents() {
 	}
 
 	nonce := uint32(accountInfo.Nonce)
+	latestBlock, err := api.RPC.Chain.GetBlockLatest()
+	if err != nil {
+		panic(err)
+	}
+	latestHash, err := api.RPC.Chain.GetBlockHashLatest()
+	if err != nil {
+		panic(err)
+	}
+	var e types.ExtrinsicEra
+	e.IsMortalEra = true
+	number := latestBlock.Block.Header.Number
+	second := types.U64(number) % 128
 
+	e.AsMortalEra = types.MortalEra{First: types.U64(128), Second: types.U64(second)}
 	o := types.SignatureOptions{
-		BlockHash:          genesisHash,
-		Era:                types.ExtrinsicEra{IsMortalEra: false},
+		BlockHash:          latestHash,
+		Era:                e,
 		GenesisHash:        genesisHash,
 		Nonce:              types.NewUCompactFromUInt(uint64(nonce)),
 		SpecVersion:        rv.SpecVersion,

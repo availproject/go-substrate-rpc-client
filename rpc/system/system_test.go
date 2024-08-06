@@ -95,7 +95,7 @@ var mockSrv = MockSrv{
 	networkState: types.NetworkState{PeerID: "my-peer-id"},
 	peers: []types.PeerInfo{{PeerID: "another-peer-id", Roles: "Role", ProtocolVersion: 42,
 		BestHash: types.NewHash(codec.MustHexDecodeString("0xabcd")), BestNumber: 420}},
-	properties: types.ChainProperties{IsTokenDecimals: true, AsTokenDecimals: 18,
-		IsTokenSymbol: true, AsTokenSymbol: "GSRPCCOIN"},
+	properties: types.ChainProperties{IsEthereum: false, SS58Format: 42,
+		TokenDecimals: 18, TokenSymbol: "AVAIL"},
 	version: "My version",
 }

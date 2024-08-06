@@ -18,6 +18,7 @@ package types
 
 import (
 	"encoding/json"
+	"encoding/json"
 	"math/big"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/scale"

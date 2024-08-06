@@ -18,7 +18,6 @@ package client
 
 import (
 	"context"
-	"log"
 
 	"github.com/centrifuge/go-substrate-rpc-client/v4/config"
 	gethrpc "github.com/centrifuge/go-substrate-rpc-client/v4/gethrpc"
@@ -33,9 +32,20 @@ type Client interface {
 	// args must be encoded in the format RPC understands
 	Call(result interface{}, method string, args ...interface{}) error
 
-	Subscribe(ctx context.Context, namespace, subscribeMethodSuffix, unsubscribeMethodSuffix,
-		notificationMethodSuffix string, channel interface{}, args ...interface{}) (
-		*gethrpc.ClientSubscription, error)
+	CallContext(
+		ctx context.Context,
+		result interface{},
+		method string,
+		args ...interface{},
+	) error
+
+	Subscribe(
+		ctx context.Context,
+		namespace, subscribeMethodSuffix, unsubscribeMethodSuffix,
+		notificationMethodSuffix string,
+		channel interface{},
+		args ...interface{},
+	) (*gethrpc.ClientSubscription, error)
 
 	URL() string
 
@@ -59,8 +69,6 @@ func (c client) Close() {
 
 // Connect connects to the provided url
 func Connect(url string) (Client, error) {
-	log.Printf("Connecting to %v...", url)
-
 	ctx, cancel := context.WithTimeout(context.Background(), config.Default().DialTimeout)
 	defer cancel()
 
@@ -73,8 +81,21 @@ func Connect(url string) (Client, error) {
 }
 
 func CallWithBlockHash(c Client, target interface{}, method string, blockHash *types.Hash, args ...interface{}) error {
+	ctx := context.Background()
+
+	return CallWithBlockHashContext(ctx, c, target, method, blockHash, args...)
+}
+
+func CallWithBlockHashContext(
+	ctx context.Context,
+	c Client,
+	target interface{},
+	method string,
+	blockHash *types.Hash,
+	args ...interface{},
+) error {
 	if blockHash == nil {
-		err := c.Call(target, method, args...)
+		err := c.CallContext(ctx, target, method, args...)
 		if err != nil {
 			return err
 		}
@@ -85,7 +106,7 @@ func CallWithBlockHash(c Client, target interface{}, method string, blockHash *t
 		return err
 	}
 	args = append(args, hexHash)
-	err = c.Call(target, method, args...)
+	err = c.CallContext(ctx, target, method, args...)
 	if err != nil {
 		return err
 	}
